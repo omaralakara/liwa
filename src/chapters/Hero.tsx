@@ -145,7 +145,7 @@ export function Hero({ image, mobile, dawn }: Props) {
             .fromTo(q(".hero__caption"), { autoAlpha: 0, y: 12 }, { autoAlpha: 1, y: 0, duration: 0.12 }, 0.46)
             .to(q(".hero__caption"), { autoAlpha: 0, duration: 0.1 }, 0.8)
             // the cut to Chapter II
-            .to(q(".hero__shade"), { autoAlpha: 0.72, duration: 0.16 }, 0.84)
+            .to(q(".hero__shade"), { autoAlpha: 0.55, duration: 0.16 }, 0.84)
             .fromTo(q(".hero__stage"), { scale: 1.14 }, { scale: 1.08, duration: 0.16, ease: "power1.in", immediateRender: false }, 0.84);
         },
       );

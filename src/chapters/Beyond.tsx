@@ -106,6 +106,10 @@ export function Beyond({ image, detail, position, detailPosition }: Props) {
             <p className="body beyond__note">
               Built from natural materials, with deep shade and nothing you do not need.
             </p>
+            <p className="body beyond__note">
+              LIWA Safari is a luxury safari brand for Namibia: Arabian hospitality in the oldest desert on earth, with
+              the privacy, the quiet and the attention to detail a luxury safari should have.
+            </p>
           </div>
         </div>
       </div>

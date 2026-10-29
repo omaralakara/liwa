@@ -90,7 +90,7 @@ export function Vision({ image, mobile }: Props) {
             .to(q(".vision__text"), { yPercent: -10, autoAlpha: 0, duration: 0.12, ease: "power1.in" }, 0.86)
             .to(q(".vision__eyebrow"), { autoAlpha: 0, duration: 0.08 }, 0.86)
             // settle into the dark for the invitation
-            .to(q(".vision__shade"), { autoAlpha: 0.9, duration: 0.14 }, 0.86)
+            .to(q(".vision__shade"), { autoAlpha: 0.65, duration: 0.14 }, 0.86)
             .to(media, { scale: 0.98, duration: 0.14, ease: "power1.in" }, 0.86);
 
           let lines: gsap.core.Tween | undefined;
@@ -116,6 +116,9 @@ export function Vision({ image, mobile }: Props) {
   return (
     <section id="vision" ref={root} className="scene vision" aria-labelledby="vision-title">
       <div className="scene__stage">
+        <div className="scene__ghost" aria-hidden="true">
+          <Picture id={image} mobile={mobile} sizes="100vw" position="50% 82%" style={FILL} />
+        </div>
         <div className="scene__window vision__window">
           <div className="scene__media vision__media">
             <Picture id={image} mobile={mobile} sizes="100vw" position="50% 82%" style={FILL} />

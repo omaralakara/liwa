@@ -107,7 +107,8 @@
 
 .hero {
   position: relative;
-  height: 100svh;
+  height: 100vh;
+  height: 100lvh; /* large viewport: no gap when the phone address bar collapses */
   min-height: 560px;
   overflow: hidden;
   background: var(--charcoal);
@@ -296,11 +297,11 @@
 
 @media (max-width: 767px) {
   .hero {
-    min-height: 100svh;
+    min-height: 100lvh;
   }
   .hero__text {
     max-width: none;
-    bottom: 64px;
+    bottom: calc(64px + (100lvh - 100svh)); /* stays above the fold while the address bar is showing */
   }
   .hero__eyebrow {
     flex-direction: column;

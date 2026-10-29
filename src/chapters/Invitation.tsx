@@ -72,7 +72,7 @@ export function Invitation() {
         <h2 id="invitation-title" className="display display--h3 display--italic invitation__headline">
           Until we meet in the desert.
         </h2>
-        <p className="body invitation__host">{site.fullName}. Write to us, or call.</p>
+        <p className="body invitation__host">{site.fullName}. A luxury safari brand in Namibia. Write to us, or call.</p>
         <address className="invitation__contact" style={{ fontStyle: "normal" }}>
           <a className="link" href={`mailto:${site.contact.email}`}>
             {site.contact.email}

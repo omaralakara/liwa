@@ -91,7 +91,8 @@ export function Land({ image, mobile, position }: Props) {
             and after a day or two neither are you.
           </p>
           <p className="land__note body">
-            Namibia is a country with more sky than people. LIWA belongs to it.
+            Namibia is a country with more sky than people. From the dunes of Sossusvlei to the Skeleton Coast and
+            the plains of Etosha, it is one of the great safari countries of Africa. LIWA belongs to it.
           </p>
         </div>
       </div>

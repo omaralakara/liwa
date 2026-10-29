@@ -67,14 +67,14 @@ export function Wild({ image, mobile }: Props) {
             // the band opens, the camera pulls back
             .to(band.geo, { t: 0, b: 0, duration: 0.3, ease: "power2.inOut", onUpdate: band.apply }, 0)
             .fromTo(media, { scale: phone ? 1.55 : 1.7 }, { scale: 1, duration: 0.9, ease: "power1.out", immediateRender: false }, 0)
-            .fromTo(q(".wild__veil"), { autoAlpha: 0.5 }, { autoAlpha: 0, duration: 0.35 }, 0)
+            .fromTo(q(".wild__veil"), { autoAlpha: 0.3 }, { autoAlpha: 0, duration: 0.35 }, 0)
             // words arrive with the widening view
             .fromTo(q(".wild__eyebrow"), { autoAlpha: 0, y: 8 }, { autoAlpha: 1, y: 0, duration: 0.08 }, 0.12)
             .fromTo(q(".wild__body"), { autoAlpha: 0, y: 14 }, { autoAlpha: 1, y: 0, duration: 0.12 }, 0.46)
             // and leave as the light goes
             .to(q(".wild__text"), { yPercent: -12, autoAlpha: 0, duration: 0.14, ease: "power1.in" }, 0.8)
             .to(q(".wild__eyebrow"), { autoAlpha: 0, duration: 0.08 }, 0.8)
-            .to(q(".wild__shade"), { autoAlpha: 0.88, duration: 0.18 }, 0.82)
+            .to(q(".wild__shade"), { autoAlpha: 0.6, duration: 0.18 }, 0.82)
             .to(media, { scale: 0.97, duration: 0.18, ease: "power1.in" }, 0.82);
 
           let lines: gsap.core.Tween | undefined;
@@ -98,6 +98,9 @@ export function Wild({ image, mobile }: Props) {
   return (
     <section id="wild" ref={root} className="scene wild" aria-labelledby="wild-title">
       <div className="scene__stage">
+        <div className="scene__ghost" aria-hidden="true">
+          <Picture id={image} mobile={mobile} sizes="100vw" position="40% 60%" style={FILL} />
+        </div>
         <div className="scene__window wild__window">
           <div className="scene__media wild__media">
             <Picture id={image} mobile={mobile} sizes="100vw" position="40% 60%" style={FILL} />
@@ -121,7 +124,8 @@ export function Wild({ image, mobile }: Props) {
         </h2>
         <p className="scene__body wild__body">
           Nothing in Namibia keeps to a schedule. You go out early, you wait, and when something steps into the
-          light you remember why you came.
+          light you remember why you came. Desert-adapted elephant, oryx, giraffe and lion inland; seals and
+          flamingos on the coast. A Namibian safari is as much about space and light as it is about the animals.
         </p>
       </div>
 

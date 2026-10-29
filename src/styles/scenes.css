@@ -2,7 +2,8 @@
 
 .scene {
   position: relative;
-  height: 100svh;
+  height: 100vh;
+  height: 100lvh;
   min-height: 560px;
   overflow: hidden;
   background: var(--charcoal);
@@ -10,6 +11,18 @@
 }
 
 .scene__stage {
+  position: absolute;
+  inset: 0;
+}
+
+/* A dimmed copy of the photograph sits behind the clipped window: the frame is never empty black */
+.scene__ghost {
+  position: absolute;
+  inset: 0;
+  opacity: 0.34;
+}
+
+.scene__ghost .picture {
   position: absolute;
   inset: 0;
 }
@@ -198,13 +211,13 @@
   }
   .scene__text {
     max-width: none;
-    bottom: 64px;
+    bottom: calc(64px + (100lvh - 100svh));
   }
   .scene__headline {
     font-size: clamp(2.4rem, 1.2rem + 7vw, 3.4rem);
   }
   .vision .scene__text--centre {
-    bottom: 96px;
+    bottom: calc(96px + (100lvh - 100svh));
   }
 }
 
@@ -214,7 +227,8 @@
   position: relative;
   display: grid;
   grid-template-rows: 1fr auto;
-  min-height: 100svh;
+  min-height: 100vh;
+  min-height: 100lvh;
   overflow: hidden;
   background: var(--charcoal-2);
   color: var(--ivory);
@@ -259,8 +273,9 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center; /* the closing words sit in the middle of the screen, never above a void */
   text-align: center;
-  padding: 16svh var(--gutter) 10svh;
+  padding: calc(var(--header-h) + 6svh) var(--gutter) 8svh;
 }
 
 .invitation__mark {
@@ -327,7 +342,7 @@
 
 @media (max-width: 767px) {
   .invitation__centre {
-    padding: 14svh var(--gutter) 8svh;
+    padding: calc(var(--header-h) + 4svh) var(--gutter) 6svh;
   }
   .invitation__mark {
     width: 168px;

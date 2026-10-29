@@ -144,7 +144,8 @@
 
 .wonder__frame {
   position: relative;
-  height: 100svh;
+  height: 100vh;
+  height: 100lvh;
   min-height: 520px;
   margin: 0;
   overflow: hidden;
@@ -213,17 +214,17 @@
 }
 
 .wonder__pair .wonder__frame {
-  height: 88svh;
+  height: 88lvh;
   min-height: 480px;
 }
 
 .wonder__frame--closing {
-  height: 100svh;
+  height: 100lvh;
 }
 
 @media (max-width: 767px) {
   .wonder__frame {
-    height: 82svh;
+    height: 82lvh;
     min-height: 460px;
   }
   .wonder__eyebrow {
@@ -234,14 +235,14 @@
     grid-template-columns: 1fr;
   }
   .wonder__pair .wonder__frame {
-    height: 72svh;
+    height: 72lvh;
     min-height: 420px;
   }
   .wonder__frame--closing {
-    height: 92svh;
+    height: 100lvh;
   }
   .wonder__text {
-    bottom: 36px;
+    bottom: calc(36px + (100lvh - 100svh));
     gap: 14px;
   }
   .wonder__caption {
