@@ -1,5 +1,5 @@
 import { useRef } from "react";
-import { gsap, SplitText, useGSAP } from "../lib/gsap";
+import { gsap, SplitText, restPoints, useGSAP } from "../lib/gsap";
 import { Picture } from "../components/Picture";
 import type { ImageId } from "../data/assets";
 
@@ -25,15 +25,15 @@ export function Hero({ image, mobile, dawn }: Props) {
     () => {
       const q = gsap.utils.selector(root);
       const mm = gsap.matchMedia();
+      // The entrance's camera settle, handed to the scroll timeline so the two never fight.
+      let settle: gsap.core.Tween | undefined;
 
+      // ---------- Entrance ----------
+      // No width condition here: a resize across the phone breakpoint must never replay the title sequence.
       mm.add(
-        {
-          motion: "(prefers-reduced-motion: no-preference)",
-          reduced: "(prefers-reduced-motion: reduce)",
-          phone: "(max-width: 767px)",
-        },
+        { motion: "(prefers-reduced-motion: no-preference)", reduced: "(prefers-reduced-motion: reduce)" },
         (ctx) => {
-          const { motion, phone } = ctx.conditions as { motion: boolean; phone: boolean };
+          const { motion } = ctx.conditions as { motion: boolean };
 
           if (!motion) {
             // Final, legible states with no motion at all.
@@ -43,7 +43,6 @@ export function Hero({ image, mobile, dawn }: Props) {
             return;
           }
 
-          // ---------- Entrance ----------
           const headline = q(".hero__headline")[0];
           SplitText.create(headline, {
             type: "lines",
@@ -64,10 +63,11 @@ export function Hero({ image, mobile, dawn }: Props) {
           const brand = document.querySelector(".site-header__brand");
           const headerRest = document.querySelectorAll(".site-header__nav, .site-header__contact");
 
+          settle = gsap.fromTo(q(".hero__stage"), { scale: 1.1 }, { scale: 1, duration: 3.4, ease: "expo.out", paused: true });
           const intro = gsap.timeline({ defaults: { ease: "power3.out" } });
           intro
             .to(q(".hero__veil"), { autoAlpha: 0, duration: 2.6, ease: "power2.inOut" }, 0)
-            .fromTo(q(".hero__stage"), { scale: 1.1 }, { scale: 1, duration: 3.4, ease: "expo.out" }, 0)
+            .add(settle, 0)
             .fromTo(q(".hero__glow"), { autoAlpha: 0 }, { autoAlpha: 1, duration: 2.8, ease: "power2.inOut" }, 0.5);
           if (brand) intro.from(brand, { y: 14, autoAlpha: 0, duration: 1.4 }, 0.9);
           if (headerRest.length) intro.from(headerRest, { autoAlpha: 0, duration: 1.2 }, 1.6);
@@ -76,7 +76,24 @@ export function Hero({ image, mobile, dawn }: Props) {
             .from(q(".hero__lede"), { y: 16, autoAlpha: 0, duration: 1.2 }, 1.9)
             .from(q(".hero__cue"), { scaleY: 0, transformOrigin: "top center", duration: 1.1, ease: "power2.inOut" }, 2.2);
 
-          // ---------- Scroll ----------
+          return () => {
+            settle = undefined;
+          };
+        },
+      );
+
+      // ---------- Scroll ----------
+      // Geometry depends on the phone breakpoint, so this context is rebuilt when it is crossed.
+      mm.add(
+        {
+          motion: "(prefers-reduced-motion: no-preference)",
+          reduced: "(prefers-reduced-motion: reduce)",
+          phone: "(max-width: 767px)",
+        },
+        (ctx) => {
+          const { motion, phone } = ctx.conditions as { motion: boolean; phone: boolean };
+          if (!motion) return;
+
           const scroll = gsap.timeline({
             defaults: { ease: "none" },
             scrollTrigger: {
@@ -87,6 +104,12 @@ export function Hero({ image, mobile, dawn }: Props) {
               scrub: 0.9,
               anticipatePin: 1,
               invalidateOnRefresh: true,
+              refreshPriority: 1,
+              snap: restPoints([0, 0.8, 1]),
+              onUpdate: (self) => {
+                // Once the user scrolls, the entrance settle hands the stage over to the scrubbed push.
+                if (self.progress > 0.002 && settle?.isActive()) settle.progress(1);
+              },
             },
           });
 

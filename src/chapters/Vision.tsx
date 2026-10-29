@@ -1,5 +1,5 @@
 import { useRef } from "react";
-import { gsap, ScrollTrigger, SplitText, useGSAP } from "../lib/gsap";
+import { gsap, ScrollTrigger, SplitText, restPoints, useGSAP } from "../lib/gsap";
 import { insetClip } from "../lib/clip";
 import { Picture } from "../components/Picture";
 import type { ImageId } from "../data/assets";
@@ -56,47 +56,53 @@ export function Vision({ image, mobile }: Props) {
           };
           applyArch();
 
+          // Built once; only the headline's line tween is replaced on a re-split (see Wild).
+          const tl = gsap.timeline({
+            defaults: { ease: "none" },
+            scrollTrigger: {
+              trigger: root.current,
+              start: "top top",
+              end: phone ? "+=200%" : "+=240%",
+              pin: true,
+              scrub: 0.9,
+              anticipatePin: 1,
+              invalidateOnRefresh: true,
+              refreshPriority: 1,
+              snap: restPoints([0, 0.8, 1]),
+              onRefresh: () => {
+                stageWidth = root.current?.clientWidth ?? window.innerWidth;
+                applyArch();
+              },
+            },
+          });
+
+          tl
+            // the doorway appears and opens
+            .fromTo(q(".vision__eyebrow"), { autoAlpha: 0 }, { autoAlpha: 1, duration: 0.08 }, 0.02)
+            .fromTo(arch, { autoAlpha: 0 }, { autoAlpha: 1, duration: 0.08 }, 0.02)
+            .fromTo(media, { scale: 1.22, yPercent: 2 }, { scale: 1, yPercent: 0, duration: 0.8, ease: "power1.out", immediateRender: false }, 0)
+            .to(win.geo, { t: 0, r: 0, b: 0, l: 0, duration: 0.5, ease: "power2.inOut", onUpdate: applyArch }, 0.14)
+            .to(arch, { autoAlpha: 0, duration: 0.06 }, 0.62)
+            // lamplight warms as we enter
+            .fromTo(q(".vision__glow"), { autoAlpha: 0 }, { autoAlpha: 1, duration: 0.4 }, 0.2)
+            // the words of intention
+            .fromTo(q(".vision__lede"), { autoAlpha: 0, y: 14 }, { autoAlpha: 1, y: 0, duration: 0.12 }, 0.68)
+            .to(q(".vision__text"), { yPercent: -10, autoAlpha: 0, duration: 0.12, ease: "power1.in" }, 0.86)
+            .to(q(".vision__eyebrow"), { autoAlpha: 0, duration: 0.08 }, 0.86)
+            // settle into the dark for the invitation
+            .to(q(".vision__shade"), { autoAlpha: 0.9, duration: 0.14 }, 0.86)
+            .to(media, { scale: 0.98, duration: 0.14, ease: "power1.in" }, 0.86);
+
+          let lines: gsap.core.Tween | undefined;
           SplitText.create(headline, {
             type: "lines",
             mask: "lines",
             linesClass: "scene__line",
             autoSplit: true,
             onSplit: (self) => {
-              const tl = gsap.timeline({
-                defaults: { ease: "none" },
-                scrollTrigger: {
-                  trigger: root.current,
-                  start: "top top",
-                  end: phone ? "+=200%" : "+=240%",
-                  pin: true,
-                  scrub: 0.9,
-                  anticipatePin: 1,
-                  invalidateOnRefresh: true,
-                  onRefresh: () => {
-                    stageWidth = root.current?.clientWidth ?? window.innerWidth;
-                    applyArch();
-                  },
-                },
-              });
-
-              tl
-                // the doorway appears and opens
-                .fromTo(q(".vision__eyebrow"), { autoAlpha: 0 }, { autoAlpha: 1, duration: 0.08 }, 0.02)
-                .fromTo(arch, { autoAlpha: 0 }, { autoAlpha: 1, duration: 0.08 }, 0.02)
-                .fromTo(media, { scale: 1.22, yPercent: 2 }, { scale: 1, yPercent: 0, duration: 0.8, ease: "power1.out", immediateRender: false }, 0)
-                .to(win.geo, { t: 0, r: 0, b: 0, l: 0, duration: 0.5, ease: "power2.inOut", onUpdate: applyArch }, 0.14)
-                .to(arch, { autoAlpha: 0, duration: 0.06 }, 0.62)
-                // lamplight warms as we enter
-                .fromTo(q(".vision__glow"), { autoAlpha: 0 }, { autoAlpha: 1, duration: 0.4 }, 0.2)
-                // the words of intention
-                .fromTo(self.lines, { yPercent: 112 }, { yPercent: 0, duration: 0.14, stagger: 0.05, ease: "power3.out" }, 0.56)
-                .fromTo(q(".vision__lede"), { autoAlpha: 0, y: 14 }, { autoAlpha: 1, y: 0, duration: 0.12 }, 0.68)
-                .to(q(".vision__text"), { yPercent: -10, autoAlpha: 0, duration: 0.12, ease: "power1.in" }, 0.86)
-                .to(q(".vision__eyebrow"), { autoAlpha: 0, duration: 0.08 }, 0.86)
-                // settle into the dark for the invitation
-                .to(q(".vision__shade"), { autoAlpha: 0.9, duration: 0.14 }, 0.86)
-                .to(media, { scale: 0.98, duration: 0.14, ease: "power1.in" }, 0.86);
-              return tl;
+              lines?.kill();
+              lines = gsap.fromTo(self.lines, { yPercent: 112 }, { yPercent: 0, duration: 0.14, stagger: 0.05, ease: "power3.out" });
+              tl.add(lines, 0.56);
             },
           });
 

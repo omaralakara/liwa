@@ -1,5 +1,5 @@
 import { useRef } from "react";
-import { gsap, SplitText, useGSAP } from "../lib/gsap";
+import { gsap, SplitText, restPoints, useGSAP } from "../lib/gsap";
 import { insetClip } from "../lib/clip";
 import { Picture } from "../components/Picture";
 import type { ImageId } from "../data/assets";
@@ -46,40 +46,47 @@ export function Wild({ image, mobile }: Props) {
           // camera pull-back inside it never changes the band's geometry.
           const band = insetClip(q(".wild__window")[0] as HTMLElement, phone ? { t: 42, b: 24 } : { t: 44, b: 22 });
 
+          // The pinned timeline is built once. Only the headline's line tween is replaced when
+          // SplitText re-splits (font load, resize), so the pin and its spacer are never torn down.
+          const tl = gsap.timeline({
+            defaults: { ease: "none" },
+            scrollTrigger: {
+              trigger: root.current,
+              start: "top top",
+              end: phone ? "+=170%" : "+=220%",
+              pin: true,
+              scrub: 0.9,
+              anticipatePin: 1,
+              invalidateOnRefresh: true,
+              refreshPriority: 1,
+              snap: restPoints([0, 0.62, 1]),
+            },
+          });
+
+          tl
+            // the band opens, the camera pulls back
+            .to(band.geo, { t: 0, b: 0, duration: 0.3, ease: "power2.inOut", onUpdate: band.apply }, 0)
+            .fromTo(media, { scale: phone ? 1.55 : 1.7 }, { scale: 1, duration: 0.9, ease: "power1.out", immediateRender: false }, 0)
+            .fromTo(q(".wild__veil"), { autoAlpha: 0.5 }, { autoAlpha: 0, duration: 0.35 }, 0)
+            // words arrive with the widening view
+            .fromTo(q(".wild__eyebrow"), { autoAlpha: 0, y: 8 }, { autoAlpha: 1, y: 0, duration: 0.08 }, 0.12)
+            .fromTo(q(".wild__body"), { autoAlpha: 0, y: 14 }, { autoAlpha: 1, y: 0, duration: 0.12 }, 0.46)
+            // and leave as the light goes
+            .to(q(".wild__text"), { yPercent: -12, autoAlpha: 0, duration: 0.14, ease: "power1.in" }, 0.8)
+            .to(q(".wild__eyebrow"), { autoAlpha: 0, duration: 0.08 }, 0.8)
+            .to(q(".wild__shade"), { autoAlpha: 0.88, duration: 0.18 }, 0.82)
+            .to(media, { scale: 0.97, duration: 0.18, ease: "power1.in" }, 0.82);
+
+          let lines: gsap.core.Tween | undefined;
           SplitText.create(headline, {
             type: "lines",
             mask: "lines",
             linesClass: "scene__line",
             autoSplit: true,
             onSplit: (self) => {
-              const tl = gsap.timeline({
-                defaults: { ease: "none" },
-                scrollTrigger: {
-                  trigger: root.current,
-                  start: "top top",
-                  end: phone ? "+=170%" : "+=220%",
-                  pin: true,
-                  scrub: 0.9,
-                  anticipatePin: 1,
-                  invalidateOnRefresh: true,
-                },
-              });
-
-              tl
-                // the band opens, the camera pulls back
-                .to(band.geo, { t: 0, b: 0, duration: 0.3, ease: "power2.inOut", onUpdate: band.apply }, 0)
-                .fromTo(media, { scale: phone ? 1.55 : 1.7 }, { scale: 1, duration: 0.9, ease: "power1.out", immediateRender: false }, 0)
-                .fromTo(q(".wild__veil"), { autoAlpha: 0.5 }, { autoAlpha: 0, duration: 0.35 }, 0)
-                // words arrive with the widening view
-                .fromTo(q(".wild__eyebrow"), { autoAlpha: 0, y: 8 }, { autoAlpha: 1, y: 0, duration: 0.08 }, 0.12)
-                .fromTo(self.lines, { yPercent: 112 }, { yPercent: 0, duration: 0.16, stagger: 0.05, ease: "power3.out" }, 0.3)
-                .fromTo(q(".wild__body"), { autoAlpha: 0, y: 14 }, { autoAlpha: 1, y: 0, duration: 0.12 }, 0.46)
-                // and leave as the light goes
-                .to(q(".wild__text"), { yPercent: -12, autoAlpha: 0, duration: 0.14, ease: "power1.in" }, 0.8)
-                .to(q(".wild__eyebrow"), { autoAlpha: 0, duration: 0.08 }, 0.8)
-                .to(q(".wild__shade"), { autoAlpha: 0.88, duration: 0.18 }, 0.82)
-                .to(media, { scale: 0.97, duration: 0.18, ease: "power1.in" }, 0.82);
-              return tl;
+              lines?.kill();
+              lines = gsap.fromTo(self.lines, { yPercent: 112 }, { yPercent: 0, duration: 0.16, stagger: 0.05, ease: "power3.out" });
+              tl.add(lines, 0.3);
             },
           });
         },
