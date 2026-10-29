@@ -1,0 +1,59 @@
+/* LIWA design tokens — deep charcoal night, burgundy brand, desert gold light, ivory type. */
+
+:root {
+  /* Ground */
+  --charcoal: #141311; /* page ground: deep charcoal with a trace of warmth */
+  --charcoal-2: #1a1816; /* lifted ground for the end chapter */
+  --black: #000000; /* letterbox bars only */
+  --umber: var(--charcoal); /* legacy alias */
+
+  /* Type */
+  --ivory: #ede6da;
+  --bone: var(--ivory);
+  --fog: #a9b0b3; /* captions, secondary type (cool counterweight) */
+  --fog-dim: rgba(169, 176, 179, 0.74);
+
+  /* Brand and light */
+  --claret: #701830; /* LIWA burgundy, exactly as sampled from the logo */
+  --claret-lift: rgba(112, 24, 48, 0.1); /* lantern warmth at the foot of each frame */
+  --gold: #c89c62; /* desert gold: hairlines, the threshold frame, the scroll cue. Never a fill. */
+  --gold-dim: rgba(200, 156, 98, 0.55);
+
+  /* The one light ground: warm sand paper for Chapter VI, charcoal type on it */
+  --sand: #e8dfd0;
+  --sand-deep: #d9cdb9;
+  --umber-fog: rgba(20, 19, 17, 0.66); /* secondary type on sand, 5.3:1 */
+
+  /* Fonts */
+  --font-display: "Gambetta", "Iowan Old Style", "Palatino Linotype", Georgia, serif;
+  --font-body: "Switzer", system-ui, -apple-system, "Segoe UI", sans-serif;
+
+  /* Scale */
+  --text-caption: 0.875rem;
+  --text-body: 1.125rem;
+  --text-lede: clamp(1.25rem, 1.05rem + 0.9vw, 1.75rem);
+  --text-h1: clamp(3rem, 1.6rem + 7.2vw, 9.5rem);
+  --text-h2: clamp(2.5rem, 1.4rem + 5vw, 6.5rem);
+  --text-h3: clamp(2.25rem, 1.5rem + 3.2vw, 4.5rem);
+  --text-contact: clamp(1.375rem, 1rem + 1.6vw, 2.25rem);
+
+  /* Rhythm */
+  --gutter: clamp(20px, 2.2vw + 10px, 64px);
+  --bar: 52px;
+  --edge: 12px; /* mobile letterbox edge */
+  --measure: 34rem;
+  --pause: clamp(18svh, 24svh, 32svh);
+  --header-h: 84px;
+
+  /* Motion */
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --t-fast: 320ms;
+}
+
+@media (max-width: 767px) {
+  :root {
+    --text-body: 1.0625rem;
+    --bar: 44px;
+    --header-h: 68px;
+  }
+}

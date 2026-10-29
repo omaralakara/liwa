@@ -1,0 +1,339 @@
+/* ---------- Shared scene anatomy (Chapters II and III) ---------- */
+
+.scene {
+  position: relative;
+  height: 100svh;
+  min-height: 560px;
+  overflow: hidden;
+  background: var(--charcoal);
+  color: var(--ivory);
+}
+
+.scene__stage {
+  position: absolute;
+  inset: 0;
+}
+
+.scene__window {
+  position: absolute;
+  inset: 0;
+  will-change: clip-path;
+}
+
+.scene__media {
+  position: absolute;
+  inset: 0;
+  will-change: transform;
+}
+
+.scene__media .picture {
+  position: absolute;
+  inset: 0;
+}
+
+/* Unifying night grade: a touch of charcoal and a vignette on every photograph */
+.scene__grade {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    linear-gradient(to top, var(--claret-lift), transparent 30%),
+    radial-gradient(120% 95% at 50% 45%, transparent 48%, rgba(10, 9, 8, 0.6) 100%),
+    rgba(20, 19, 17, 0.14);
+}
+
+.scene__grain {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.scene__scrim {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    linear-gradient(to top, rgba(10, 9, 8, 0.78) 0%, rgba(10, 9, 8, 0.4) 30%, transparent 60%),
+    linear-gradient(to bottom, rgba(10, 9, 8, 0.4) 0%, transparent 22%);
+}
+
+.scene__scrim--centre {
+  background:
+    linear-gradient(to top, rgba(10, 9, 8, 0.8) 0%, rgba(10, 9, 8, 0.42) 36%, transparent 64%),
+    linear-gradient(to bottom, rgba(10, 9, 8, 0.4) 0%, transparent 22%);
+}
+
+.scene__eyebrow {
+  position: absolute;
+  top: calc(var(--header-h) + 8px);
+  left: var(--gutter);
+  display: flex;
+  gap: 18px;
+  color: var(--fog);
+  visibility: hidden;
+}
+
+.scene__eyebrow span:first-child {
+  color: var(--ivory);
+}
+
+.scene__text {
+  position: absolute;
+  left: var(--gutter);
+  right: var(--gutter);
+  bottom: clamp(48px, 9svh, 96px);
+  max-width: min(56rem, 78%);
+  will-change: transform, opacity;
+}
+
+.scene__text--centre {
+  left: 50%;
+  right: auto;
+  bottom: clamp(56px, 11svh, 120px);
+  transform: translateX(-50%);
+  width: min(60rem, calc(100% - 2 * var(--gutter)));
+  max-width: none;
+  text-align: center;
+}
+
+.scene__headline {
+  font-size: clamp(2.75rem, 1.4rem + 5.6vw, 7rem);
+  line-height: 1;
+}
+
+.scene__text--centre .scene__headline {
+  margin-inline: auto;
+  max-width: 14ch;
+}
+
+.scene__line {
+  padding-bottom: 0.08em;
+  margin-bottom: -0.08em;
+}
+
+.scene__body {
+  margin-top: clamp(18px, 2.4vw, 32px);
+  max-width: 28rem;
+  color: rgba(237, 230, 218, 0.85);
+}
+
+.scene__text--centre .lede {
+  margin: clamp(18px, 2.4vw, 32px) auto 0;
+  max-width: 32rem;
+  color: rgba(237, 230, 218, 0.86);
+}
+
+.scene__veil,
+.scene__shade {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: var(--charcoal);
+  opacity: 0;
+}
+
+.scene__veil {
+  background: #000;
+}
+
+/* ---------- Chapter II ---------- */
+
+.wild__media {
+  transform-origin: 28% 62%;
+}
+
+/* Words on the right, the animal keeps the left: a mirror of the hero's composition */
+.wild .scene__scrim {
+  background:
+    linear-gradient(to top, rgba(10, 9, 8, 0.78) 0%, rgba(10, 9, 8, 0.4) 30%, transparent 60%),
+    linear-gradient(to left, rgba(10, 9, 8, 0.38) 0%, transparent 48%),
+    linear-gradient(to bottom, rgba(10, 9, 8, 0.4) 0%, transparent 22%);
+}
+
+@media (min-width: 768px) {
+  .wild__text {
+    left: auto;
+    right: var(--gutter);
+    text-align: right;
+  }
+  .wild__text .scene__body {
+    margin-left: auto;
+  }
+  .wild__headline {
+    margin-left: auto;
+  }
+}
+
+/* ---------- Chapter III ---------- */
+
+.vision__glow {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0;
+  mix-blend-mode: screen;
+  background: radial-gradient(42% 36% at 44% 78%, rgba(255, 170, 90, 0.42), rgba(255, 140, 60, 0.12) 45%, transparent 72%);
+}
+
+.vision__arch {
+  position: absolute;
+  border: 1px solid var(--gold-dim);
+  border-bottom: 0;
+  pointer-events: none;
+  visibility: hidden;
+}
+
+.vision .scene__text--centre {
+  bottom: clamp(72px, 13svh, 140px);
+}
+
+.vision__shade {
+  z-index: 2;
+}
+
+@media (max-width: 767px) {
+  .scene__eyebrow {
+    flex-direction: column;
+    gap: 2px;
+  }
+  .scene__text {
+    max-width: none;
+    bottom: 64px;
+  }
+  .scene__headline {
+    font-size: clamp(2.4rem, 1.2rem + 7vw, 3.4rem);
+  }
+  .vision .scene__text--centre {
+    bottom: 96px;
+  }
+}
+
+/* ---------- Chapter VII ---------- */
+
+.invitation {
+  position: relative;
+  display: grid;
+  grid-template-rows: 1fr auto;
+  min-height: 100svh;
+  overflow: hidden;
+  background: var(--charcoal-2);
+  color: var(--ivory);
+}
+
+.invitation__ember {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0;
+  background: radial-gradient(46% 34% at 50% 30%, rgba(112, 24, 48, 0.42), rgba(200, 156, 98, 0.08) 48%, transparent 72%);
+}
+
+.invitation__ember::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(30% 22% at 50% 32%, rgba(255, 176, 96, 0.14), transparent 70%);
+  animation: ember-breathe 9s ease-in-out infinite alternate;
+  will-change: transform, opacity;
+}
+
+@keyframes ember-breathe {
+  from {
+    transform: scale(0.94);
+    opacity: 0.6;
+  }
+  to {
+    transform: scale(1.06);
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .invitation__ember::after {
+    animation: none;
+  }
+}
+
+.invitation__centre {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 16svh var(--gutter) 10svh;
+}
+
+.invitation__mark {
+  width: 220px;
+  color: var(--ivory);
+}
+
+.invitation__headline {
+  margin-top: 44px;
+  max-width: 18ch;
+}
+
+.invitation__host {
+  margin-top: 28px;
+  max-width: 30rem;
+  color: var(--fog);
+}
+
+/* A short gold hairline separates the words from the contacts */
+.invitation__contact {
+  position: relative;
+  margin-top: 52px;
+  padding-top: 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: var(--text-contact);
+  line-height: 1.3;
+  font-variant-numeric: tabular-nums lining-nums;
+}
+
+.invitation__contact::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 50%;
+  width: 36px;
+  height: 1px;
+  transform: translateX(-50%);
+  background: var(--gold-dim);
+}
+
+.invitation__contact .link {
+  padding: 6px 2px;
+  min-height: 44px;
+  transition: color var(--t-fast) var(--ease-out);
+}
+
+.invitation__contact .link:hover,
+.invitation__contact .link:focus-visible {
+  color: var(--gold);
+}
+
+.invitation__footer {
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  gap: 24px;
+  padding: 24px var(--gutter) 28px;
+  color: var(--fog-dim);
+}
+
+@media (max-width: 767px) {
+  .invitation__centre {
+    padding: 14svh var(--gutter) 8svh;
+  }
+  .invitation__mark {
+    width: 168px;
+  }
+  .invitation__footer {
+    flex-direction: column;
+    gap: 4px;
+  }
+}

@@ -1,0 +1,319 @@
+/* ---------- Mark ---------- */
+
+.mark {
+  display: inline-block;
+  width: 128px;
+  aspect-ratio: 896 / 288;
+  background-color: currentColor;
+  -webkit-mask: url("/brand/liwa-mark.png") center / contain no-repeat;
+  mask: url("/brand/liwa-mark.png") center / contain no-repeat;
+}
+
+@media (forced-colors: active) {
+  .mark {
+    forced-color-adjust: none;
+    background-color: CanvasText;
+  }
+}
+
+/* ---------- Header ---------- */
+
+.site-header {
+  position: fixed;
+  inset: 0 0 auto 0;
+  z-index: 60;
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  gap: 24px;
+  height: var(--header-h);
+  padding-inline: var(--gutter);
+  color: var(--ivory);
+  transition:
+    background-color 500ms var(--ease-out),
+    height 500ms var(--ease-out);
+}
+
+.site-header.is-past-hero {
+  height: calc(var(--header-h) - 16px);
+  background-color: rgba(20, 19, 17, 0.9);
+}
+
+.site-header__brand {
+  justify-self: start;
+  display: inline-flex;
+  color: var(--ivory);
+}
+
+.site-header__nav {
+  display: none;
+  gap: 28px;
+}
+
+.site-header__nav a {
+  position: relative;
+  padding: 6px 0;
+  font-size: 0.8125rem;
+  letter-spacing: 0.02em;
+  color: var(--fog);
+  transition: color var(--t-fast) var(--ease-out);
+}
+
+.site-header__nav a::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 1px;
+  background: var(--gold);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform var(--t-fast) var(--ease-out);
+}
+
+.site-header__nav a[aria-current="true"],
+.site-header__nav a:hover {
+  color: var(--ivory);
+}
+
+.site-header__nav a[aria-current="true"]::after,
+.site-header__nav a:hover::after {
+  transform: scaleX(1);
+}
+
+.site-header__contact {
+  justify-self: end;
+  font-size: var(--text-caption);
+  color: var(--ivory);
+}
+
+@media (min-width: 960px) {
+  .site-header__nav {
+    display: flex;
+  }
+}
+
+@media (max-width: 767px) {
+  .site-header {
+    grid-template-columns: 1fr auto;
+  }
+  .mark {
+    width: 104px;
+  }
+}
+
+/* ---------- Hero ---------- */
+
+.hero {
+  position: relative;
+  height: 100svh;
+  min-height: 560px;
+  overflow: hidden;
+  background: var(--charcoal);
+  color: var(--ivory);
+}
+
+.hero__stage {
+  position: absolute;
+  inset: 0;
+  transform-origin: 50% 55%;
+  will-change: transform;
+}
+
+.hero__photo,
+.hero__window {
+  position: absolute;
+  inset: 0;
+}
+
+.hero__photo .picture,
+.hero__window .picture {
+  position: absolute;
+  inset: 0;
+}
+
+.hero__window {
+  clip-path: inset(46% 50% 46% 50% round 28px);
+  will-change: clip-path;
+}
+
+/* Warm light blooming on the crest */
+.hero__glow {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0;
+  mix-blend-mode: screen;
+  background: radial-gradient(58% 52% at 56% 40%, rgba(255, 176, 96, 0.5), rgba(255, 140, 64, 0.16) 42%, transparent 72%);
+}
+
+/* Drifting haze: two soft gradients moved only by transform */
+.hero__haze {
+  position: absolute;
+  inset: -20%;
+  pointer-events: none;
+  opacity: 0.16;
+  display: none;
+}
+
+.hero__haze::before,
+.hero__haze::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(40% 30% at 30% 60%, rgba(237, 230, 218, 0.9), transparent 70%);
+  will-change: transform;
+  animation: hero-drift 46s ease-in-out infinite alternate;
+}
+
+.hero__haze::after {
+  background: radial-gradient(36% 28% at 70% 45%, rgba(237, 230, 218, 0.7), transparent 70%);
+  animation-duration: 61s;
+  animation-direction: alternate-reverse;
+}
+
+@keyframes hero-drift {
+  from {
+    transform: translate3d(-4%, 2%, 0) scale(1);
+  }
+  to {
+    transform: translate3d(5%, -3%, 0) scale(1.08);
+  }
+}
+
+@media (min-width: 768px) and (prefers-reduced-motion: no-preference) {
+  .hero__haze {
+    display: block;
+  }
+}
+
+.hero__grain {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+/* Legibility: a quiet darkening low-left and along the top edge for the header */
+.hero__scrim {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    linear-gradient(to top, rgba(10, 9, 8, 0.78) 0%, rgba(10, 9, 8, 0.42) 28%, transparent 58%),
+    linear-gradient(to bottom, rgba(10, 9, 8, 0.45) 0%, transparent 22%),
+    linear-gradient(to right, rgba(10, 9, 8, 0.35) 0%, transparent 45%);
+}
+
+/* The threshold frame: 1px desert gold in the logo's rounded-rectangle geometry */
+.hero__frame {
+  position: absolute;
+  border: 1px solid var(--gold-dim);
+  border-radius: 28px;
+  pointer-events: none;
+  visibility: hidden;
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.18);
+}
+
+.hero__caption {
+  position: absolute;
+  left: 50%;
+  bottom: 18%;
+  transform: translateX(-50%);
+  color: var(--ivory);
+  visibility: hidden;
+  letter-spacing: 0.02em;
+}
+
+.hero__text {
+  position: absolute;
+  left: var(--gutter);
+  right: var(--gutter);
+  bottom: clamp(48px, 9svh, 96px);
+  max-width: min(58rem, 78%);
+  will-change: transform, opacity;
+}
+
+.hero__eyebrow {
+  display: flex;
+  gap: 18px;
+  margin-bottom: clamp(16px, 2.2vw, 28px);
+  color: var(--fog);
+}
+
+.hero__eyebrow span:first-child {
+  color: var(--ivory);
+}
+
+.hero__headline {
+  max-width: 13ch;
+  font-size: clamp(2.75rem, 1.4rem + 5.6vw, 7rem);
+  line-height: 1;
+  letter-spacing: -0.012em;
+  text-wrap: balance;
+}
+
+.hero__line {
+  padding-bottom: 0.08em; /* keep descenders inside the line mask */
+  margin-bottom: -0.08em;
+}
+
+.hero__lede {
+  margin-top: clamp(18px, 2.4vw, 32px);
+  max-width: 30rem;
+  font-size: var(--text-lede);
+  font-family: var(--font-display);
+  font-weight: 400;
+  line-height: 1.35;
+  color: rgba(237, 230, 218, 0.86);
+}
+
+.hero__cue {
+  position: absolute;
+  right: var(--gutter);
+  bottom: clamp(40px, 7svh, 72px);
+  width: 1px;
+  height: 64px;
+  background: linear-gradient(to bottom, var(--gold), transparent);
+  will-change: transform;
+}
+
+.hero__shade,
+.hero__veil {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.hero__shade {
+  background: var(--charcoal);
+  opacity: 0;
+}
+
+.hero__veil {
+  background: #000;
+}
+
+@media (max-width: 767px) {
+  .hero {
+    min-height: 100svh;
+  }
+  .hero__text {
+    max-width: none;
+    bottom: 64px;
+  }
+  .hero__eyebrow {
+    flex-direction: column;
+    gap: 2px;
+  }
+  .hero__headline {
+    font-size: clamp(2.4rem, 1.2rem + 7vw, 3.4rem);
+  }
+  .hero__cue {
+    bottom: 22px;
+    height: 36px;
+  }
+  .hero__caption {
+    bottom: 22%;
+  }
+}

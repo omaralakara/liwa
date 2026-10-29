@@ -1,0 +1,212 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  color-scheme: dark;
+  scroll-behavior: smooth;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+  }
+}
+
+html,
+body {
+  min-height: 100%;
+}
+
+body {
+  background: var(--umber);
+  color: var(--bone);
+  font-family: var(--font-body);
+  font-weight: 300;
+  font-size: var(--text-body);
+  line-height: 1.6;
+  overflow-x: hidden;
+}
+
+::selection {
+  background: var(--claret);
+  color: var(--bone);
+}
+
+img,
+svg,
+video {
+  display: block;
+  max-width: 100%;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+a:focus-visible,
+button:focus-visible {
+  outline: 2px solid var(--claret);
+  outline-offset: 3px;
+  box-shadow: 0 0 0 5px var(--bone);
+}
+
+/* Typography */
+
+.display {
+  font-family: var(--font-display);
+  font-weight: 300;
+  line-height: 0.95;
+  letter-spacing: -0.015em;
+  text-wrap: balance;
+}
+
+.display--h1 {
+  font-size: var(--text-h1);
+}
+
+.display--h2 {
+  font-size: var(--text-h2);
+}
+
+.display--h3 {
+  font-size: var(--text-h3);
+  line-height: 1.05;
+}
+
+.display--italic {
+  font-style: italic;
+}
+
+.lede {
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: var(--text-lede);
+  line-height: 1.35;
+  max-width: var(--measure);
+  text-wrap: pretty;
+}
+
+.body {
+  max-width: var(--measure);
+  text-wrap: pretty;
+}
+
+.caption {
+  font-size: var(--text-caption);
+  line-height: 1.45;
+  color: var(--fog);
+  letter-spacing: 0.01em;
+}
+
+.link {
+  position: relative;
+  display: inline-block;
+}
+
+.link::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -0.18em;
+  height: 1px;
+  background: var(--claret);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform var(--t-fast) var(--ease-out);
+}
+
+.link:hover::after,
+.link:focus-visible::after {
+  transform: scaleX(1);
+}
+
+/* Layout primitives */
+
+.gutter {
+  padding-inline: var(--gutter);
+}
+
+.cols {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  column-gap: clamp(12px, 1.5vw, 24px);
+}
+
+.visually-hidden {
+  position: absolute !important;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.skip-link {
+  position: fixed;
+  top: 12px;
+  left: 12px;
+  z-index: 100;
+  padding: 10px 16px;
+  background: var(--bone);
+  color: var(--umber);
+  font-size: var(--text-caption);
+  transform: translateY(-200%);
+}
+
+.skip-link:focus {
+  transform: none;
+}
+
+/* Picture (responsive image with reserved ratio and blur placeholder) */
+
+.picture {
+  position: relative;
+  overflow: hidden;
+  background-size: cover;
+  background-position: center;
+}
+
+.picture img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0;
+  transition: opacity 600ms ease-out;
+}
+
+.picture.is-loaded img {
+  opacity: 1;
+}
+
+/* Film grain: a static SVG noise tile at very low opacity, photographic frames only. */
+
+.grain::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.035;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: 200px 200px;
+}

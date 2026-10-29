@@ -1,0 +1,77 @@
+{
+  "version": 1,
+  "skills": {
+    "build-awwwards-quality-sites": {
+      "source": "mengto/skills",
+      "sourceType": "github",
+      "skillPath": "agent-skills/web-design/build-awwwards-quality-sites/SKILL.md",
+      "computedHash": "5a1bb2b382c617361c7984c036a834b4153f9160bcb84fa189d005a9e192a2ac"
+    },
+    "build-threejs-scroll-worlds": {
+      "source": "mengto/skills",
+      "sourceType": "github",
+      "skillPath": "agent-skills/web-design/build-threejs-scroll-worlds/SKILL.md",
+      "computedHash": "400b44c6fb0640080db5622d6d19b9df59f7562da6bffa822e105b83c7529891"
+    },
+    "cinematic-gsap-lenis-motion-system": {
+      "source": "mengto/skills",
+      "sourceType": "github",
+      "skillPath": "agent-skills/web-design/cinematic-gsap-lenis-motion-system/SKILL.md",
+      "computedHash": "909ca61ea5c11dae974a222aeb3bc55e1aaa88158abe002b5d7080908cc012af"
+    },
+    "frontend-design": {
+      "source": "anthropics/skills",
+      "sourceType": "github",
+      "skillPath": "skills/frontend-design/SKILL.md",
+      "computedHash": "106acf230014cbb43ca34e6410371321b56ca742f9ee0442e8ec05bf02eb0384"
+    },
+    "gsap-core": {
+      "source": "greensock/gsap-skills",
+      "sourceType": "github",
+      "skillPath": "skills/gsap-core/SKILL.md",
+      "computedHash": "b891c9ed42d9319685250231085ebe21538f2c844613b277b9dd2b3ff529a542"
+    },
+    "gsap-plugins": {
+      "source": "greensock/gsap-skills",
+      "sourceType": "github",
+      "skillPath": "skills/gsap-plugins/SKILL.md",
+      "computedHash": "50a320904c3053a1a7d01ea95235944814d18c0b5958f17e38046504aa6078a8"
+    },
+    "gsap-react": {
+      "source": "greensock/gsap-skills",
+      "sourceType": "github",
+      "skillPath": "skills/gsap-react/SKILL.md",
+      "computedHash": "255206fb6a4a079ad73b4a12e7c63197dc451a8549c7ac4e852b50ff74ef3bd6"
+    },
+    "gsap-scrolltrigger": {
+      "source": "greensock/gsap-skills",
+      "sourceType": "github",
+      "skillPath": "skills/gsap-scrolltrigger/SKILL.md",
+      "computedHash": "358dd3381c74fc4be8db5a94e0cd008bf0fa7c1ccd45999671b0d61b9d9ffd9b"
+    },
+    "scroll-scrubbed-visual-sequence": {
+      "source": "mengto/skills",
+      "sourceType": "github",
+      "skillPath": "agent-skills/web-design/scroll-scrubbed-visual-sequence/SKILL.md",
+      "computedHash": "bd9f568318264af929259ca032cf6c7a79a20fd4ae8e5bf2778f64884189893e"
+    },
+    "threejs-postprocessing": {
+      "source": "cloudai-x/threejs-skills",
+      "sourceType": "github",
+      "skillPath": "skills/threejs-postprocessing/SKILL.md",
+      "computedHash": "80f26b45e551a792e80ebcd03446d74ecabb1ba9519d3a34f4e8d5459bfc4c6b"
+    },
+    "threejs-react-three-fiber": {
+      "source": "cloudai-x/threejs-skills",
+      "sourceType": "github",
+      "skillPath": "skills/threejs-react-three-fiber/SKILL.md",
+      "computedHash": "1eb7de8f600b96e2bbefe0d2a9fdce45b60e5811b165e384d853ad9b6a0c5f70"
+    },
+    "threejs-shaders": {
+      "source": "cloudai-x/threejs-skills",
+      "sourceType": "github",
+      "skillPath": "skills/threejs-shaders/SKILL.md",
+      "computedHash": "9f25737c01e28e91192e57aa294c9535e313566225b9eaad9aacee9b4211666b"
+    }
+  }
+}
