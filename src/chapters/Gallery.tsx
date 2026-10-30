@@ -122,7 +122,7 @@ export function Gallery() {
           <br />
           holding still.
         </h2>
-        <p className="gallery__note caption">Select a photograph to see it full screen.</p>
+        <p className="gallery__note caption">Illustrative photographs. Select one to see it full screen.</p>
       </header>
 
       {/* The wild: from the sundown to the plain */}

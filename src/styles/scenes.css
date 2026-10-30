@@ -200,7 +200,11 @@
   bottom: clamp(72px, 13svh, 140px);
 }
 
-.vision__eyebrow span {
+/* Over a bright photograph the quieter second line needs full ivory too */
+.vision__eyebrow span,
+.wild__eyebrow span,
+.land__eyebrow span,
+.wonder__eyebrow span {
   color: var(--ivory);
 }
 

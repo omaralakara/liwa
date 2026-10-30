@@ -74,7 +74,11 @@ export function SiteHeader({ page }: { page: Page }) {
     // The bar turns solid once the page's first section has gone.
     const first = document.querySelector("main section");
     if (first) {
-      const firstObserver = new IntersectionObserver(([e]) => setPast(!e.isIntersecting), { rootMargin: "-80px 0px 0px 0px", threshold: 0 });
+      // The newest entry decides: a deep link can deliver "in view" and "gone" in one batch, and the bar must not stay clear over a light chapter.
+      const firstObserver = new IntersectionObserver((entries) => setPast(!entries[entries.length - 1].isIntersecting), {
+        rootMargin: "-80px 0px 0px 0px",
+        threshold: 0,
+      });
       firstObserver.observe(first);
       observers.push(firstObserver);
     }

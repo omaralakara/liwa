@@ -461,15 +461,6 @@
   min-height: 5.5em;
 }
 
-/* Fuller contrast on the quietest words: nothing here has to fit, or to step back */
-.packages-enquire .visit__optional {
-  opacity: 1;
-}
-
-.packages-enquire .visit__input::placeholder {
-  opacity: 0.9;
-}
-
 .packages-enquire .visit__submit-row {
   margin-top: clamp(24px, 3.4vh, 36px);
 }

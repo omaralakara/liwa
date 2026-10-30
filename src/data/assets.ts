@@ -128,7 +128,7 @@ export const images = {
   },
   "land-aerial": {
     "id": "land-aerial",
-    "alt": "The Namib dune sea from above, orange crests and long blue shadows",
+    "alt": "The Namib dune sea from above, orange crests and long dark shadows",
     "width": 5774,
     "height": 3740,
     "conceptual": false,
@@ -148,7 +148,7 @@ export const images = {
   },
   "land-aerial-portrait": {
     "id": "land-aerial-portrait",
-    "alt": "The Namib dune sea from above, orange crests and long blue shadows",
+    "alt": "The Namib dune sea from above, orange crests and long dark shadows",
     "width": 2560,
     "height": 3200,
     "conceptual": false,

@@ -42,7 +42,7 @@ export const packages: Package[] = [
     slug: "resort",
     title: "The Resort",
     summary:
-      "Time at the resort LIWA is planning, with real comfort and care for the land around it. It is not open yet. Ask us and we will keep you informed.",
+      "Time at the resort LIWA is planning, with real comfort and care for the land around it. Ask us and we will keep you informed.",
     image: "gallery-table",
     position: "50% 42%",
     status: "example",

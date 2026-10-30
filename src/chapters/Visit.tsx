@@ -92,7 +92,7 @@ export function Visit({ image = "beyond-interior", position = "50% 60%" }: Props
             </div>
             <div className="visit__foot" aria-hidden="true" />
           </div>
-          <figcaption className="visit__caption">Clay walls, and the evening coming in.</figcaption>
+          <figcaption className="visit__caption">Clay walls, and the evening coming in. Illustrative photograph.</figcaption>
         </figure>
 
         <div className="visit__words">

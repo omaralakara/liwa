@@ -351,6 +351,21 @@ html {
 }
 
 /* A small circular bullet: a hollow ring at rest, filled under the pointer, gold with a halo when current. */
+/* The dialog's own close: hidden until the keyboard reaches it, so that Tab stop is never invisible. */
+.menu__close:focus-visible {
+  top: 12px;
+  left: 50%;
+  z-index: 2;
+  width: auto;
+  height: auto;
+  margin: 0;
+  padding: 10px 16px;
+  overflow: visible;
+  clip: auto;
+  background: var(--ivory);
+  color: var(--charcoal);
+}
+
 .menu__primary-dot {
   display: block;
   width: 8px;
