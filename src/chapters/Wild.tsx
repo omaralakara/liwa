@@ -9,12 +9,12 @@ type Props = { image: ImageId; mobile?: ImageId };
 const FILL = { aspectRatio: "auto", width: "100%", height: "100%" } as const;
 
 /**
- * Chapter II: The Encounter.
+ * Chapter III: Into the Wild.
  *
  * Opens as a dark widescreen band held tight on the oryx. The band expands to the
  * full frame while the camera pulls back, so the animal becomes small in a vast
  * plain: the scale and silence of the place is the moment. Headline lines rise
- * through masks with the pull-back, then leave as the scene dims toward Chapter III.
+ * through masks with the pull-back, then leave as the scene dims toward Chapter IV.
  */
 export function Wild({ image, mobile }: Props) {
   const root = useRef<HTMLElement>(null);
@@ -48,18 +48,20 @@ export function Wild({ image, mobile }: Props) {
 
           // The pinned timeline is built once. Only the headline's line tween is replaced when
           // SplitText re-splits (font load, resize), so the pin and its spacer are never torn down.
+          const rests = restPoints([0, 0.62, 1]);
           const tl = gsap.timeline({
             defaults: { ease: "none" },
             scrollTrigger: {
               trigger: root.current,
               start: "top top",
-              end: phone ? "+=170%" : "+=220%",
+              end: phone ? "+=90%" : "+=110%",
               pin: true,
               scrub: 0.9,
               anticipatePin: 1,
               invalidateOnRefresh: true,
               refreshPriority: 1,
-              snap: restPoints([0, 0.62, 1]),
+              snap: rests,
+              onToggle: rests.sync,
             },
           });
 
@@ -113,7 +115,7 @@ export function Wild({ image, mobile }: Props) {
 
       <p className="scene__eyebrow wild__eyebrow caption">
         <span>Into the Wild</span>
-        <span>What lives here</span>
+        <span>The safari</span>
       </p>
 
       <div className="scene__text wild__text">
@@ -123,9 +125,9 @@ export function Wild({ image, mobile }: Props) {
           set the pace.
         </h2>
         <p className="scene__body wild__body">
-          Nothing in Namibia keeps to a schedule. You go out early, you wait, and when something steps into the
-          light you remember why you came. Desert-adapted elephant, oryx, giraffe and lion inland; seals and
-          flamingos on the coast. A Namibian safari is as much about space and light as it is about the animals.
+          Safari in Namibia keeps no schedule. You go out early, you wait, and when something steps into the light
+          you remember why you came. Desert-adapted elephant, oryx, giraffe and lion inland; seals and flamingos on
+          the coast. This is the safari LIWA is built around: as much about space and light as about the animals.
         </p>
       </div>
 

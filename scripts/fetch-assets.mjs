@@ -179,10 +179,12 @@ if (derived.length) {
     const dir = resolve(root, "public/images", d.folder ?? source.credit.folder ?? "derived");
     await mkdir(dir, { recursive: true });
     const files = {};
-    const grade = (img) =>
-      img
+    const grade = (img) => {
+      const g = img
         .modulate({ brightness: d.brightness ?? 1, saturation: d.saturation ?? 1, hue: d.hue ?? 0 })
         .linear(d.contrast ?? 1, d.offset ?? 0);
+      return d.tint ? g.tint(d.tint) : g; // optional warm cast, e.g. { r, g, b }
+    };
     for (const [w, path] of Object.entries(source.files)) {
       const file = `${d.slug}-${w}.webp`;
       const dest = resolve(dir, file);

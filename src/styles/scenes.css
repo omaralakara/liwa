@@ -216,8 +216,21 @@
   .scene__headline {
     font-size: clamp(2.4rem, 1.2rem + 7vw, 3.4rem);
   }
+  /* Phones: the body sits on the animal, so it stays short and a touch smaller */
+  .scene__body {
+    margin-top: 16px;
+    max-width: 24rem;
+    font-size: 1rem;
+    line-height: 1.5;
+  }
   .vision .scene__text--centre {
     bottom: calc(96px + (100lvh - 100svh));
+  }
+  /* A brighter sky on the portrait crop: deepen the top scrim so the eyebrow reads */
+  .vision .scene__scrim--centre {
+    background:
+      linear-gradient(to top, rgba(10, 9, 8, 0.8) 0%, rgba(10, 9, 8, 0.42) 36%, transparent 64%),
+      linear-gradient(to bottom, rgba(10, 9, 8, 0.62) 0%, rgba(10, 9, 8, 0.3) 16%, transparent 34%);
   }
 }
 
@@ -226,9 +239,9 @@
 .invitation {
   position: relative;
   display: grid;
-  grid-template-rows: 1fr auto;
-  min-height: 100vh;
-  min-height: 100lvh;
+  grid-template-rows: 1fr;
+  min-height: 88vh;
+  min-height: 88lvh; /* the practical contacts and the footer moved to Chapter IX */
   overflow: hidden;
   background: var(--charcoal-2);
   color: var(--ivory);
@@ -294,61 +307,11 @@
   color: var(--fog);
 }
 
-/* A short gold hairline separates the words from the contacts */
-.invitation__contact {
-  position: relative;
-  margin-top: 52px;
-  padding-top: 28px;
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-  font-family: var(--font-display);
-  font-weight: 400;
-  font-size: var(--text-contact);
-  line-height: 1.3;
-  font-variant-numeric: tabular-nums lining-nums;
-}
-
-.invitation__contact::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 50%;
-  width: 36px;
-  height: 1px;
-  transform: translateX(-50%);
-  background: var(--gold-dim);
-}
-
-.invitation__contact .link {
-  padding: 6px 2px;
-  min-height: 44px;
-  transition: color var(--t-fast) var(--ease-out);
-}
-
-.invitation__contact .link:hover,
-.invitation__contact .link:focus-visible {
-  color: var(--gold);
-}
-
-.invitation__footer {
-  position: relative;
-  display: flex;
-  justify-content: space-between;
-  gap: 24px;
-  padding: 24px var(--gutter) 28px;
-  color: var(--fog-dim);
-}
-
 @media (max-width: 767px) {
   .invitation__centre {
     padding: calc(var(--header-h) + 4svh) var(--gutter) 6svh;
   }
   .invitation__mark {
     width: 168px;
-  }
-  .invitation__footer {
-    flex-direction: column;
-    gap: 4px;
   }
 }

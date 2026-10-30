@@ -1,0 +1,140 @@
+/* ---------- Sound toggle: three hairlines that breathe while the ambience plays ---------- */
+
+.sound-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 44px;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--ivory);
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.sound-toggle__glyph {
+  display: inline-flex;
+  width: 14px;
+  height: 14px;
+  color: var(--ivory);
+  opacity: 0.92;
+}
+
+.sound-toggle__glyph svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+.sound-toggle__label {
+  color: var(--fog);
+  letter-spacing: 0.02em;
+  transition: color var(--t-fast) var(--ease-out);
+}
+
+.sound-toggle:hover .sound-toggle__label,
+.sound-toggle:focus-visible .sound-toggle__label {
+  color: var(--ivory);
+}
+
+/* Off: the lines sit still and fade back a little. */
+.sound-toggle:not(.sound-toggle--on) .sound-toggle__glyph {
+  opacity: 0.55;
+}
+
+/* Each hairline breathes at its own pace from its own middle; paused unless sound is audible. */
+.sound-toggle__line {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: sound-breathe 3.2s ease-in-out infinite;
+  animation-play-state: paused;
+}
+
+.sound-toggle__line:nth-child(1) {
+  animation-duration: 2.7s;
+  animation-delay: -0.9s;
+}
+
+.sound-toggle__line:nth-child(2) {
+  animation-duration: 3.4s;
+  animation-delay: -1.7s;
+}
+
+.sound-toggle__line:nth-child(3) {
+  animation-duration: 2.9s;
+  animation-delay: -0.3s;
+}
+
+.sound-toggle--playing .sound-toggle__line {
+  animation-play-state: running;
+}
+
+@keyframes sound-breathe {
+  0%,
+  100% {
+    transform: scaleY(0.62);
+  }
+  50% {
+    transform: scaleY(1);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sound-toggle__line {
+    animation: none;
+  }
+}
+
+/* ---------- Variants ---------- */
+
+/* Header: caption size; below 960px only the glyph shows and the words become the accessible name. */
+.sound-toggle--header {
+  gap: 8px;
+}
+
+.sound-toggle--header .sound-toggle__label {
+  font-size: 0.8125rem;
+}
+
+@media (max-width: 959px) {
+  .sound-toggle--header {
+    width: 44px;
+    justify-content: center;
+    gap: 0;
+  }
+  .sound-toggle--header .sound-toggle__label {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    padding: 0;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+    border: 0;
+  }
+}
+
+/* Menu: a larger line inside the overlay. */
+.sound-toggle--menu {
+  gap: 12px;
+  min-height: 48px;
+}
+
+.sound-toggle--menu .sound-toggle__glyph {
+  width: 18px;
+  height: 18px;
+}
+
+.sound-toggle--menu .sound-toggle__label {
+  font-size: var(--text-body);
+  line-height: 1.3;
+}
+
+@media (forced-colors: active) {
+  .sound-toggle__glyph {
+    color: ButtonText;
+  }
+}

@@ -9,7 +9,7 @@ type Props = { image: ImageId; mobile?: ImageId; position?: string };
 const FILL = { aspectRatio: "auto", width: "100%", height: "100%" } as const;
 
 /**
- * Chapter III: The Land.
+ * Chapter IV: The Land.
  *
  * The first deliberate stillness. One monumental panorama, revealed once by a slow
  * wipe as the chapter arrives, and a headline that sits half on the photograph and
@@ -87,12 +87,12 @@ export function Land({ image, mobile, position }: Props) {
         <div className="land__columns cols">
           <span className="land__rule" aria-hidden="true" />
           <p className="land__statement lede">
-            The Namib has been a desert for something like fifty-five million years. Nothing here is in a hurry,
-            and after a day or two neither are you.
+            The Namib has been a desert for some fifty-five million years. Nothing here hurries, and after a day or
+            two neither do you.
           </p>
           <p className="land__note body">
-            Namibia is a country with more sky than people. From the dunes of Sossusvlei to the Skeleton Coast and
-            the plains of Etosha, it is one of the great safari countries of Africa. LIWA belongs to it.
+            Namibia has more sky than people. From the dunes of Sossusvlei to the Skeleton Coast and the plains of
+            Etosha, it is one of the great safari countries of Africa. This is LIWA&rsquo;s country.
           </p>
         </div>
       </div>

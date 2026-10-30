@@ -9,7 +9,7 @@ type Props = { image: ImageId; mobile?: ImageId };
 const FILL = { aspectRatio: "auto", width: "100%", height: "100%" } as const;
 
 /**
- * Chapter V: A New Vision.
+ * Chapter VI: A New Vision.
  *
  * The signature transition. Out of the dark, a tall doorway with a rounded
  * architectural arch opens onto the lamp-lit pavilion; the arch widens until the
@@ -57,18 +57,20 @@ export function Vision({ image, mobile }: Props) {
           applyArch();
 
           // Built once; only the headline's line tween is replaced on a re-split (see Wild).
+          const rests = restPoints([0, 0.8, 1]);
           const tl = gsap.timeline({
             defaults: { ease: "none" },
             scrollTrigger: {
               trigger: root.current,
               start: "top top",
-              end: phone ? "+=200%" : "+=240%",
+              end: phone ? "+=90%" : "+=110%",
               pin: true,
               scrub: 0.9,
               anticipatePin: 1,
               invalidateOnRefresh: true,
               refreshPriority: 1,
-              snap: restPoints([0, 0.8, 1]),
+              snap: rests,
+              onToggle: rests.sync,
               onRefresh: () => {
                 stageWidth = root.current?.clientWidth ?? window.innerWidth;
                 applyArch();
@@ -132,7 +134,7 @@ export function Vision({ image, mobile }: Props) {
 
       <p className="scene__eyebrow vision__eyebrow caption">
         <span>A New Vision</span>
-        <span>As the lamps are lit</span>
+        <span>The resort, as we imagine it</span>
       </p>
 
       <div className="scene__text scene__text--centre vision__text">
@@ -142,8 +144,8 @@ export function Vision({ image, mobile }: Props) {
           come back to.
         </h2>
         <p className="lede vision__lede">
-          Somewhere to stay in the Namibian wilderness, run with the kind of welcome you find in the Gulf, where a
-          guest is looked after before they think to ask.
+          The resort LIWA intends to build: a house in the Namibian wilderness, run with the kind of welcome you find
+          in the Gulf, where a guest is looked after before they think to ask.
         </p>
       </div>
 

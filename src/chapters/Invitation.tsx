@@ -5,12 +5,12 @@ import { Mark } from "../components/Mark";
 import { site } from "../data/site";
 
 /**
- * Chapter VII: The Invitation.
+ * Chapter VIII: The Invitation.
  *
- * The calmest chapter. A low ember of light breathes behind the mark; the mark is
- * revealed through a mask, the closing line rises through line masks, and the host
- * line, status and contacts follow in one unhurried sequence. Played once on
- * arrival and reversed on leaving, not scrubbed.
+ * The emotional close. A low ember of light breathes behind the mark; the mark is
+ * revealed through a mask, the closing line rises through line masks, and one host
+ * line hands over to the practical chapter that follows (IX, Contact Us). Played
+ * once on arrival and reversed on leaving, not scrubbed.
  */
 export function Invitation() {
   const root = useRef<HTMLElement>(null);
@@ -52,9 +52,7 @@ export function Invitation() {
                 .fromTo(mark, { autoAlpha: 0 }, { autoAlpha: 1, duration: 0.6 }, 0.2)
                 .to(reveal.geo, { r: 0, duration: 1.4, ease: "power3.inOut", onUpdate: reveal.apply }, 0.2)
                 .fromTo(self.lines, { yPercent: 112 }, { yPercent: 0, duration: 1.3, stagger: 0.14 }, 0.9)
-                .fromTo(q(".invitation__host"), { autoAlpha: 0, y: 12 }, { autoAlpha: 1, y: 0, duration: 1.1 }, 1.6)
-                .fromTo(q(".invitation__contact a"), { opacity: 0, y: 10 }, { opacity: 1, y: 0, duration: 1, stagger: 0.16 }, 2.25)
-                .fromTo(q(".invitation__footer"), { autoAlpha: 0 }, { autoAlpha: 1, duration: 1.2 }, 2.9);
+                .fromTo(q(".invitation__host"), { autoAlpha: 0, y: 12 }, { autoAlpha: 1, y: 0, duration: 1.1 }, 1.6);
               return tl;
             },
           });
@@ -72,21 +70,10 @@ export function Invitation() {
         <h2 id="invitation-title" className="display display--h3 display--italic invitation__headline">
           Until we meet in the desert.
         </h2>
-        <p className="body invitation__host">{site.fullName}. A luxury safari brand in Namibia. Write to us, or call.</p>
-        <address className="invitation__contact" style={{ fontStyle: "normal" }}>
-          <a className="link" href={`mailto:${site.contact.email}`}>
-            {site.contact.email}
-          </a>
-          <a className="link" href={site.contact.phoneHref}>
-            {site.contact.phoneDisplay}
-          </a>
-        </address>
+        <p className="body invitation__host">
+          {site.fullName}. A luxury safari in Namibia, and a resort to come. When you are ready, write to us.
+        </p>
       </div>
-
-      <footer className="invitation__footer caption">
-        <span>{site.fullName}</span>
-        <span className="invitation__disclosure">{site.disclosure}</span>
-      </footer>
     </section>
   );
 }

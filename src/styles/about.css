@@ -1,0 +1,240 @@
+/* ---------- Chapter II: About LIWA ("One Horizon") ----------
+   One full-bleed frame. A single gold hairline, the horizon, is drawn across the frame; the wild
+   photograph opens out of it, then a lamp-lit house slides in from the right along the same line.
+   Clip geometry lives on unscaled windows (insetClip); transforms only on the media inside.
+   `--about-horizon` is the one coordinate the hairline, the image fitting and the type all share. */
+
+.about {
+  --about-horizon: 58%;
+  --about-head: clamp(2rem, 1.1rem + 2.7vw, 4rem);
+  --about-rest: 56; /* house window inset-left at rest, in percent (JS reads the breakpoint, not this) */
+  position: relative;
+  background: var(--charcoal);
+  color: var(--ivory);
+}
+
+.about__frame {
+  position: relative;
+  height: 100vh;
+  height: 100lvh;
+  min-height: 560px;
+  overflow: hidden;
+  background: var(--charcoal);
+}
+
+/* The fitted photographs: the helper sizes and places the <img> so the horizon lands on the line */
+.about__frame .picture img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  max-width: none;
+}
+
+.about__house .scene__media {
+  transform-origin: 100% var(--about-horizon);
+}
+
+.about__wild .scene__media {
+  transform-origin: 30% var(--about-horizon);
+}
+
+/* The lamp: the hero's glow recipe, inside the house media so it clips and rides with the photograph */
+.about__lamp {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0;
+  mix-blend-mode: screen;
+  background: radial-gradient(
+    34% 30% at var(--lamp-x, 50%) var(--lamp-y, 60%),
+    rgba(255, 176, 96, 0.45),
+    rgba(255, 140, 64, 0.12) 45%,
+    transparent 72%
+  );
+  will-change: transform, opacity;
+}
+
+/* The diptych seam: 2px of charcoal that follows the house window's left edge */
+.about__seam {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 100%;
+  width: 2px;
+  background: var(--charcoal);
+  pointer-events: none;
+}
+
+/* The horizon: the only gold line in the chapter */
+.about__horizon {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: var(--about-horizon);
+  height: 1px;
+  background: var(--gold-dim);
+  transform: scaleX(0);
+  transform-origin: left center;
+  pointer-events: none;
+  will-change: transform;
+}
+
+/* Legibility: the foot for the lede, the top for the header, and two soft pools of shade
+   behind the headline halves (the giraffe sky is bright amber; the dusk sky is pale at the line) */
+.about__scrim {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(42% 30% at 20% calc(var(--about-horizon) - 8%), rgba(10, 9, 8, 0.5), transparent 70%),
+    radial-gradient(34% 26% at 80% calc(var(--about-horizon) - 6%), rgba(10, 9, 8, 0.42), transparent 70%),
+    radial-gradient(36% 22% at 14% 10%, rgba(10, 9, 8, 0.45), transparent 70%),
+    linear-gradient(to top, rgba(10, 9, 8, 0.8) 0%, rgba(10, 9, 8, 0.44) 26%, transparent 50%),
+    linear-gradient(to bottom, rgba(10, 9, 8, 0.5) 0%, rgba(10, 9, 8, 0.2) 14%, transparent 26%);
+}
+
+.about__veil,
+.about__shade {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: var(--charcoal);
+  opacity: 0;
+}
+
+.about__eyebrow {
+  z-index: 2;
+}
+
+/* The type stands on the horizon: a 12-column grid whose first row ends just above the line */
+.about__text {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  grid-template-rows: calc(var(--about-horizon) - 0.25 * var(--about-head)) 28px auto;
+  column-gap: clamp(12px, 1.5vw, 24px);
+  padding-inline: var(--gutter);
+  pointer-events: none;
+  will-change: transform, opacity;
+}
+
+.about__headline {
+  display: contents; /* the two halves are placed on the grid themselves; the h2 keeps one sentence */
+}
+
+.about__half {
+  display: block;
+  grid-row: 1;
+  align-self: end;
+  max-width: 14ch;
+  font-size: var(--about-head);
+  line-height: 1;
+  letter-spacing: -0.012em;
+}
+
+.about__half--wild {
+  grid-column: 1 / span 5;
+}
+
+.about__half--house {
+  grid-column: 8 / span 5; /* starts right of the seam at rest, so no word straddles two photographs */
+}
+
+.about__lede {
+  grid-row: 3;
+  grid-column: 1 / span 6;
+  align-self: start;
+  max-width: 30rem;
+  color: rgba(237, 230, 218, 0.88);
+}
+
+/* ---------- The plain-words body on the Land grid ---------- */
+
+.about__body {
+  position: relative;
+  padding-block: clamp(56px, 8vh, 104px) clamp(96px, 14vh, 180px);
+  row-gap: 28px;
+}
+
+.about__rule {
+  grid-column: 1 / span 2;
+  display: block;
+  height: 1px;
+  margin-top: 0.9em;
+  background: var(--gold-dim);
+  transform-origin: left center;
+}
+
+.about__statement {
+  grid-column: 4 / span 6;
+  max-width: 30rem;
+  color: rgba(237, 230, 218, 0.9);
+}
+
+.about__note {
+  grid-column: 10 / span 3;
+  color: var(--fog);
+}
+
+@media (min-width: 768px) {
+  /* The house media is the right half of the frame: narrower than the photograph's aspect, so the
+     cover fit has horizontal slack to put the lit doorway in the middle of the house panel */
+  .about__house .scene__media {
+    left: 50%;
+  }
+}
+
+@media (max-width: 1023px) {
+  .about__statement,
+  .about__note {
+    grid-column: 3 / span 7;
+  }
+}
+
+@media (max-width: 767px) {
+  .about {
+    --about-horizon: 62%;
+    --about-head: clamp(2rem, 1.2rem + 4.6vw, 2.6rem);
+    --about-rest: 50;
+  }
+  .about__scrim {
+    background:
+      radial-gradient(70% 26% at 30% calc(var(--about-horizon) - 10%), rgba(10, 9, 8, 0.5), transparent 70%),
+      radial-gradient(76% 24% at 50% calc(var(--about-horizon) + 10%), rgba(10, 9, 8, 0.56), transparent 70%),
+      linear-gradient(to top, rgba(10, 9, 8, 0.86) 0%, rgba(10, 9, 8, 0.6) 30%, transparent 56%),
+      linear-gradient(to bottom, rgba(10, 9, 8, 0.62) 0%, rgba(10, 9, 8, 0.32) 16%, transparent 32%);
+  }
+  /* Stacked: the wild line above the horizon, the house line directly under it, then the lede */
+  .about__text {
+    grid-template-rows: calc(var(--about-horizon) - 0.25 * var(--about-head)) 14px auto 16px auto 1fr;
+    padding-bottom: calc(24px + (100lvh - 100svh));
+  }
+  .about__half--wild,
+  .about__half--house,
+  .about__lede {
+    grid-column: 1 / -1;
+  }
+  .about__half--house {
+    grid-row: 3;
+    align-self: start;
+  }
+  .about__lede {
+    grid-row: 5;
+    max-width: 24rem;
+    font-size: 1.0625rem;
+    line-height: 1.4;
+  }
+  .about__body {
+    display: block;
+    padding-block: 56px 88px;
+  }
+  .about__rule {
+    width: 56px;
+    margin: 0 0 24px;
+  }
+  .about__note {
+    margin-top: 20px;
+  }
+}

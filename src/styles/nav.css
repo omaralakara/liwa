@@ -1,0 +1,581 @@
+/* ---------- Mark ---------- */
+
+.mark {
+  display: inline-block;
+  width: 128px;
+  aspect-ratio: 896 / 288;
+  background-color: currentColor;
+  -webkit-mask: url("/brand/liwa-mark.png") center / contain no-repeat;
+  mask: url("/brand/liwa-mark.png") center / contain no-repeat;
+}
+
+@media (forced-colors: active) {
+  .mark {
+    forced-color-adjust: none;
+    background-color: CanvasText;
+  }
+}
+
+/* The scrollbar's lane is always reserved, so locking scroll for the menu never shifts the page. */
+html {
+  scrollbar-gutter: stable;
+}
+
+/* ---------- Header ---------- */
+
+.site-header {
+  position: fixed;
+  inset: 0 0 auto 0;
+  z-index: 60;
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  gap: 24px;
+  height: var(--header-h);
+  padding-inline: var(--gutter);
+  color: var(--ivory);
+  transition:
+    background-color 500ms var(--ease-out),
+    height 500ms var(--ease-out);
+}
+
+.site-header.is-past-hero {
+  height: calc(var(--header-h) - 16px);
+  background-color: rgba(20, 19, 17, 0.9);
+}
+
+/* While the menu is open the bar rides above the overlay, see-through, so the mark and the X stay. */
+.site-header.is-menu-open {
+  z-index: 95;
+  background-color: transparent;
+}
+
+/* The mark and the menu control sit above the overlay (z 90) inside the header's own stacking context. */
+.site-header__brand,
+.site-header__right {
+  position: relative;
+  z-index: 96;
+}
+
+.site-header__brand {
+  justify-self: start;
+  display: inline-flex;
+  color: var(--ivory);
+}
+
+.site-header__nav {
+  display: none;
+  gap: 28px;
+}
+
+.site-header__nav a {
+  position: relative;
+  padding: 6px 0;
+  font-size: 0.8125rem;
+  letter-spacing: 0.02em;
+  color: var(--fog);
+  transition: color var(--t-fast) var(--ease-out);
+}
+
+/* Gold hairline: draws from the left on hover, retracts to the right on leave. */
+.site-header__nav a::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 1px;
+  background: var(--gold);
+  transform: scaleX(0);
+  transform-origin: right;
+  transition: transform 420ms var(--ease-out);
+}
+
+.site-header__nav a[aria-current="true"],
+.site-header__nav a:hover,
+.site-header__nav a:focus-visible {
+  color: var(--ivory);
+}
+
+.site-header__nav a[aria-current="true"]::after,
+.site-header__nav a:hover::after,
+.site-header__nav a:focus-visible::after {
+  transform: scaleX(1);
+  transform-origin: left;
+}
+
+.site-header__right {
+  justify-self: end;
+  display: flex;
+  align-items: center;
+  gap: 28px;
+  /* The 44px control bleeds past the gutter so its bars sit flush with the gutter line. */
+  margin-right: -11px;
+}
+
+/* "Book a visit": a text link in the right group, in the primary links' language, from 768px up. */
+.site-header__contact {
+  position: relative;
+  display: none;
+  padding: 6px 0;
+  font-size: 0.8125rem;
+  letter-spacing: 0.02em;
+  color: var(--ivory);
+  transition: color var(--t-fast) var(--ease-out);
+}
+
+.site-header__contact::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 1px;
+  background: var(--gold);
+  transform: scaleX(0);
+  transform-origin: right;
+  transition: transform 420ms var(--ease-out);
+}
+
+.site-header__contact[aria-current="true"]::after,
+.site-header__contact:hover::after,
+.site-header__contact:focus-visible::after {
+  transform: scaleX(1);
+  transform-origin: left;
+}
+
+/* ---------- Menu control: two hairlines ---------- */
+
+.menu-toggle {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--ivory);
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.menu-toggle__word {
+  display: none;
+  color: var(--fog);
+  letter-spacing: 0.02em;
+  transition: color var(--t-fast) var(--ease-out);
+}
+
+.menu-toggle:hover .menu-toggle__word {
+  color: var(--ivory);
+}
+
+.menu-toggle__lines {
+  position: relative;
+  width: 22px;
+  height: 44px;
+}
+
+.menu-toggle__line {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 22px;
+  height: 1px;
+  margin: -0.5px 0 0 -11px;
+  transition: transform 360ms var(--ease-out);
+}
+
+.menu-toggle__line:nth-child(1) {
+  transform: translateY(-3.5px);
+}
+
+.menu-toggle__line:nth-child(2) {
+  transform: translateY(3.5px);
+}
+
+/* The bars part a little under a real pointer (never a sticky tap hover); the X itself is GSAP's. */
+@media (hover: hover) and (pointer: fine) {
+  .menu-toggle[aria-expanded="false"]:hover .menu-toggle__line:nth-child(1) {
+    transform: translateY(-5.5px);
+  }
+
+  .menu-toggle[aria-expanded="false"]:hover .menu-toggle__line:nth-child(2) {
+    transform: translateY(5.5px);
+  }
+}
+
+.menu-toggle__bar {
+  position: absolute;
+  inset: 0;
+  background: currentColor;
+  opacity: 0.92;
+}
+
+@media (min-width: 960px) {
+  .site-header__nav {
+    display: flex;
+  }
+  .menu-toggle {
+    width: auto;
+    padding-inline: 10px;
+  }
+  .menu-toggle__word {
+    display: inline;
+  }
+  .site-header__right {
+    gap: 22px;
+  }
+}
+
+@media (min-width: 768px) {
+  .site-header__contact {
+    display: inline-block;
+  }
+}
+
+/* Without the centre nav (below 960px) the bar is two columns, so the right group meets the gutter. */
+@media (max-width: 959px) {
+  .site-header {
+    grid-template-columns: 1fr auto;
+  }
+}
+
+@media (max-width: 767px) {
+  .site-header__nav {
+    display: none;
+  }
+  .mark {
+    width: 104px;
+  }
+}
+
+/* ---------- Menu overlay ---------- */
+
+.menu {
+  position: fixed;
+  inset: 0;
+  z-index: 90;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  color: var(--ivory);
+  visibility: hidden;
+  opacity: 0;
+}
+
+.menu__veil,
+.menu__panel {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+}
+
+.menu__veil {
+  background: var(--claret);
+}
+
+.menu__panel {
+  background: var(--charcoal);
+}
+
+/* The mark, large and faint, low right: ivory at six per cent. */
+.menu__mark {
+  position: fixed;
+  right: calc(var(--gutter) * -0.5);
+  bottom: 4vh;
+  width: min(62vw, 760px);
+  color: var(--ivory);
+  opacity: 0.06;
+  pointer-events: none;
+}
+
+.menu__inner {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  grid-template-rows: auto 1fr auto;
+  column-gap: clamp(12px, 1.5vw, 24px);
+  row-gap: 32px;
+  min-height: 100%;
+  padding: calc(var(--header-h) + 8px) var(--gutter) max(32px, 4vh);
+}
+
+.menu__meta {
+  grid-column: 1 / 7;
+  grid-row: 1;
+  color: var(--fog);
+}
+
+.menu__primary {
+  grid-column: 1 / 9;
+  align-self: center;
+  padding-block: 4vh;
+}
+
+.menu__primary ul,
+.menu__secondary ul {
+  list-style: none;
+}
+
+.menu__primary li + li {
+  margin-top: clamp(10px, 1.6vh, 18px);
+}
+
+.menu__primary li > a {
+  display: grid;
+  grid-template-columns: 2.75rem 1fr;
+  align-items: baseline;
+  color: var(--fog);
+  transition: color 420ms var(--ease-out);
+}
+
+.menu__primary-num {
+  color: var(--fog-dim);
+  font-size: var(--text-caption);
+}
+
+.menu__primary-mask {
+  position: relative;
+  display: block;
+  justify-self: start; /* as wide as the word, so the hover hairline sits under it */
+  overflow: hidden;
+  padding-bottom: 0.08em;
+}
+
+.menu__primary-inner {
+  display: inline-block;
+  /* Fluid with the width, but never so tall that five paths and the foot leave a short screen. */
+  font-size: min(clamp(2.2rem, 1.2rem + 5vw, 4.5rem), 7.6vh);
+  line-height: 1.02;
+  letter-spacing: -0.01em;
+}
+
+/* Hover: the word turns ivory and a gold hairline draws beneath it. */
+.menu__primary-mask::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 1px;
+  background: var(--gold);
+  transform: scaleX(0);
+  transform-origin: right;
+  transition: transform 520ms var(--ease-out);
+}
+
+.menu__primary li > a:hover,
+.menu__primary li > a:focus-visible {
+  color: var(--ivory);
+}
+
+.menu__primary li > a:hover .menu__primary-mask::after,
+.menu__primary li > a:focus-visible .menu__primary-mask::after {
+  transform: scaleX(1);
+  transform-origin: left;
+}
+
+/* "Book a visit": a short gold hairline, then the line, under the primary paths. */
+.menu__book {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-top: clamp(20px, 3vh, 36px);
+  padding-left: 2.75rem; /* aligns with the primary words, past the numerals */
+}
+
+.menu__book-rule {
+  display: block;
+  width: 36px;
+  height: 1px;
+  background: var(--gold-dim);
+}
+
+/* Scoped under .menu__primary so it outranks any link rule there; the primary paths use `li > a`. */
+.menu__primary .menu__book-link {
+  position: relative;
+  display: inline-block;
+  white-space: nowrap;
+  padding: 6px 0;
+  font-family: var(--font-display);
+  font-weight: 300;
+  font-size: min(clamp(1.5rem, 1rem + 2.2vw, 2.25rem), 4.6vh);
+  line-height: 1.1;
+  color: var(--fog);
+  transition: color 420ms var(--ease-out);
+}
+
+.menu__book-link::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 2px;
+  height: 1px;
+  background: var(--gold);
+  transform: scaleX(0);
+  transform-origin: right;
+  transition: transform 520ms var(--ease-out);
+}
+
+.menu__book-link:hover,
+.menu__book-link:focus-visible {
+  color: var(--ivory);
+}
+
+.menu__book-link:hover::after,
+.menu__book-link:focus-visible::after {
+  transform: scaleX(1);
+  transform-origin: left;
+}
+
+.menu__foot {
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  column-gap: clamp(12px, 1.5vw, 24px);
+  row-gap: 28px;
+  padding-top: 28px;
+}
+
+.menu__rule {
+  grid-column: 1 / -1;
+  display: block;
+  height: 1px;
+  background: var(--gold-dim);
+  margin-top: -28px;
+}
+
+.menu__secondary {
+  grid-column: 1 / 8;
+}
+
+.menu__secondary ul {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px 28px;
+}
+
+.menu__secondary a {
+  display: inline-flex;
+  gap: 10px;
+  color: var(--fog);
+  transition: color var(--t-fast) var(--ease-out);
+}
+
+.menu__secondary a span {
+  color: var(--fog-dim);
+}
+
+.menu__secondary a:hover,
+.menu__secondary a:focus-visible {
+  color: var(--ivory);
+}
+
+.menu__contact {
+  grid-column: 9 / -1;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 6px;
+  font-family: var(--font-display);
+  font-weight: 300;
+  font-size: 1.25rem;
+  line-height: 1.3;
+}
+
+.menu__contact .link::after {
+  background: var(--gold);
+}
+
+/* The sound control sits on the brand line's row, at the right edge, always on screen. */
+.menu__sound {
+  grid-column: 7 / -1;
+  grid-row: 1;
+  justify-self: end;
+  align-self: start;
+  margin-top: -12px; /* centre the 48px control on the two caption lines */
+  font-family: var(--font-body);
+}
+
+@media (max-width: 767px) {
+  .menu__inner {
+    row-gap: 24px;
+    padding-bottom: 28px;
+  }
+  .menu__meta {
+    grid-column: 1 / 9;
+  }
+  .menu__sound {
+    grid-column: 9 / -1;
+  }
+  .menu__primary {
+    grid-column: 1 / -1;
+    padding-block: 2vh;
+  }
+  .menu__primary li > a {
+    grid-template-columns: 2.25rem 1fr;
+  }
+  .menu__primary li + li {
+    margin-top: 14px;
+  }
+  .menu__book {
+    margin-top: 18px;
+    padding-left: 2.25rem;
+  }
+  .menu__secondary {
+    grid-column: 1 / -1;
+  }
+  .menu__secondary ul {
+    flex-direction: column;
+    gap: 10px;
+  }
+  .menu__contact {
+    grid-column: 1 / -1;
+    font-size: 1.125rem;
+  }
+  .menu__mark {
+    width: 78vw;
+    right: -12vw;
+    bottom: 2vh;
+  }
+}
+
+/* Short viewports (landscape phones, small laptops): tighten the rhythm before the panel has to scroll. */
+@media (max-height: 820px) {
+  .menu__inner {
+    row-gap: 16px;
+    padding-top: calc(var(--header-h) - 4px);
+  }
+  .menu__primary {
+    padding-block: 1vh;
+  }
+  .menu__primary li + li {
+    margin-top: 6px;
+  }
+  .menu__book {
+    margin-top: 12px;
+  }
+  .menu__foot {
+    padding-top: 20px;
+    row-gap: 18px;
+  }
+  .menu__rule {
+    margin-top: -20px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .menu-toggle__line,
+  .menu__primary li > a,
+  .menu__primary-mask::after,
+  .menu__book-link,
+  .menu__book-link::after,
+  .site-header__contact::after {
+    transition: none;
+  }
+}

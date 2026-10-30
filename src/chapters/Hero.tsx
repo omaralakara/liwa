@@ -2,6 +2,7 @@ import { useRef } from "react";
 import { gsap, SplitText, restPoints, useGSAP } from "../lib/gsap";
 import { Picture } from "../components/Picture";
 import type { ImageId } from "../data/assets";
+import { site } from "../data/site";
 
 type Props = { image: ImageId; mobile?: ImageId; dawn: ImageId };
 
@@ -61,7 +62,7 @@ export function Hero({ image, mobile, dawn }: Props) {
 
           // Header elements live outside this component's scope, so pass elements, not selectors.
           const brand = document.querySelector(".site-header__brand");
-          const headerRest = document.querySelectorAll(".site-header__nav, .site-header__contact");
+          const headerRest = document.querySelectorAll(".site-header__nav, .site-header__contact, .sound-toggle--header, .site-header__menu");
 
           settle = gsap.fromTo(q(".hero__stage"), { scale: 1.1 }, { scale: 1, duration: 3.4, ease: "expo.out", paused: true });
           const intro = gsap.timeline({ defaults: { ease: "power3.out" } });
@@ -94,18 +95,20 @@ export function Hero({ image, mobile, dawn }: Props) {
           const { motion, phone } = ctx.conditions as { motion: boolean; phone: boolean };
           if (!motion) return;
 
+          const rests = restPoints([0, 0.8, 1]);
           const scroll = gsap.timeline({
             defaults: { ease: "none" },
             scrollTrigger: {
               trigger: root.current,
               start: "top top",
-              end: phone ? "+=120%" : "+=160%",
+              end: phone ? "+=85%" : "+=100%",
               pin: true,
               scrub: 0.9,
               anticipatePin: 1,
               invalidateOnRefresh: true,
               refreshPriority: 1,
-              snap: restPoints([0, 0.8, 1]),
+              snap: rests,
+              onToggle: rests.sync,
               onUpdate: (self) => {
                 // Once the user scrolls, the entrance settle hands the stage over to the scrubbed push.
                 if (self.progress > 0.002 && settle?.isActive()) settle.progress(1);
@@ -174,15 +177,17 @@ export function Hero({ image, mobile, dawn }: Props) {
 
       <div className="hero__text">
         <p className="hero__eyebrow caption">
-          <span>The Awakening</span>
-          <span>Namibia, before first light</span>
+          <span>{site.fullName}</span>
+          <span>{site.descriptor}</span>
         </p>
         <h1 id="hero-title" className="hero__headline display">
           Before the light,{" "}
           <br />
           the desert is already awake.
         </h1>
-        <p className="hero__lede">A new luxury safari in Namibia.</p>
+        <p className="hero__lede">
+          A luxury safari in Namibia, and the vision for a resort in the oldest desert on earth.
+        </p>
       </div>
 
       <div className="hero__cue" aria-hidden="true" />

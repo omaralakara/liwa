@@ -6,15 +6,15 @@ import type { ImageId } from "../data/assets";
 
 export type Moment = { id: ImageId; caption: string; position?: string };
 
-type Props = { moments: [Moment, Moment, Moment, Moment] };
+type Props = { moments: [Moment, Moment, Moment, Moment, Moment] };
 
 const FILL = { aspectRatio: "auto", width: "100%", height: "100%" } as const;
 
 /**
- * Chapter IV: Moments of Wonder.
+ * Chapter V: Moments of Wonder.
  *
- * Three full-bleed moments in the same film language as the rest of the site:
- * one wide frame, a diptych (a detail beside an animal), and a closing frame that
+ * Four full-bleed moments in the same film language as the rest of the site:
+ * a wide frame, a diptych (a detail beside an animal), a second wide frame, and a closing frame that
  * carries the chapter's one line. Every frame is uncovered once as it arrives and
  * the camera drifts a little as the page moves. Nothing is pinned.
  */
@@ -90,7 +90,7 @@ export function Wonder({ moments }: Props) {
     { scope: root },
   );
 
-  const [wide, detail, animal, closing] = moments;
+  const [wide, detail, animal, plain, closing] = moments;
 
   return (
     <section id="wonder" ref={root} className="wonder" aria-labelledby="wonder-title">
@@ -99,7 +99,7 @@ export function Wonder({ moments }: Props) {
       </h2>
       <p className="wonder__eyebrow scene__eyebrow caption">
         <span>Moments of Wonder</span>
-        <span>Looking closer</span>
+        <span>On safari, looking closer</span>
       </p>
 
       <Frame m={wide} kind="wide" sizes="100vw" />
@@ -108,6 +108,8 @@ export function Wonder({ moments }: Props) {
         <Frame m={detail} kind="detail" sizes="(min-width: 768px) 40vw, 100vw" />
         <Frame m={animal} kind="animal" sizes="(min-width: 768px) 60vw, 100vw" />
       </div>
+
+      <Frame m={plain} kind="wide" sizes="100vw" />
 
       <Frame m={closing} kind="closing" sizes="100vw">
         <p className="wonder__statement display display--h3 display--italic">You come for the big animals. You remember the small things.</p>
