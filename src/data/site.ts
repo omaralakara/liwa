@@ -1,11 +1,11 @@
 // Verified facts only. Source: https://liwa.na/ (contact page), checked 2026-10-29.
-// Nothing about the property, lodges, wildlife or experiences is verified; narrative copy speaks about Namibia and about intentions only.
+// Nothing about the property, lodges, wildlife or experiences is verified; narrative copy speaks about Namibia, about values and about intentions only.
 
 export const site = {
   name: "LIWA Safari",
   fullName: "LIWA Safari Namibia",
-  /** The brand descriptor: safari today, a resort as the stated vision. Never implies the resort operates. */
-  descriptor: "Safari & Resort Vision",
+  /** The brand line: what LIWA stands for. Never implies the resort already operates. */
+  descriptor: "Safari, Resort & Preservation",
   country: "Namibia",
   contact: {
     email: "info@liwa.na",
@@ -14,37 +14,59 @@ export const site = {
     whatsappHref: "https://wa.me/264851111777",
     website: "https://liwa.na",
   },
-  /** The one discreet disclosure for all illustrative photography; shown once, in the closing chapter. */
-  disclosure: "Imagery is illustrative of the proposed experience.",
+  /** The discreet disclosure for all illustrative photography, in the footer of every page. */
+  disclosure: "Photographs are illustrative and do not show LIWA property.",
+  /** The designer's credit, in the footer of every page. */
+  credit: { name: "Synergi", href: "https://synergibpo.com/" },
   year: 2026,
 } as const;
 
-/** The nine content areas, in page order. `nav` is the short label used in secondary chapter lists. */
+/** The content areas of the homepage, in page order. */
 export const chapters = [
-  { id: "awakening", number: "I", title: "The Awakening", nav: "Awakening" },
-  { id: "about", number: "II", title: "About LIWA", nav: "About" },
-  { id: "wild", number: "III", title: "Into the Wild", nav: "Wild" },
-  { id: "land", number: "IV", title: "The Land", nav: "Land" },
-  { id: "wonder", number: "V", title: "Moments of Wonder", nav: "Wonder" },
-  { id: "vision", number: "VI", title: "A New Vision", nav: "Vision" },
-  { id: "visit", number: "VII", title: "Book a Visit", nav: "Visit" },
-  { id: "invitation", number: "VIII", title: "The Invitation", nav: "Invitation" },
-  { id: "contact", number: "IX", title: "Contact Us", nav: "Contact" },
+  { id: "awakening", title: "The Awakening" },
+  { id: "about", title: "About LIWA" },
+  { id: "wild", title: "Into the Wild" },
+  { id: "land", title: "The Land" },
+  { id: "wonder", title: "Moments of Wonder" },
+  { id: "resort", title: "The Resort" },
+  { id: "gallery", title: "Gallery" },
+  { id: "visit", title: "Book a Visit" },
+  { id: "invitation", title: "The Invitation" },
+  { id: "contact", title: "Contact Us" },
 ] as const;
 
 export type ChapterId = (typeof chapters)[number]["id"];
 
-/**
- * Primary navigation: five clear paths (header on desktop, the menu overlay everywhere).
- * The cinematic chapters stay reachable through the secondary list in the menu.
- */
-export const primaryNav: ReadonlyArray<{ id: ChapterId; label: string; hint: string }> = [
-  { id: "awakening", label: "Home", hint: "The Awakening" },
-  { id: "about", label: "About LIWA", hint: "Safari and resort vision" },
-  { id: "wild", label: "Safari", hint: "Into the Wild" },
-  { id: "vision", label: "The Resort Vision", hint: "A New Vision" },
-  { id: "contact", label: "Contact Us", hint: "Write to us, or call" },
+/** The two pages of the site. */
+export type Page = "home" | "packages";
+
+/** Everything the navigation can lead to: a homepage chapter, or the Packages page. */
+export type NavId = ChapterId | "packages";
+
+export const PACKAGES_PATH = "/packages/";
+
+/** Primary navigation, in the same order in the header and in the menu overlay. */
+export const primaryNav: ReadonlyArray<{ id: NavId; label: string }> = [
+  { id: "awakening", label: "Home" },
+  { id: "about", label: "About" },
+  { id: "wild", label: "Safari" },
+  { id: "resort", label: "Resort" },
+  { id: "gallery", label: "Gallery" },
+  { id: "packages", label: "Packages" },
+  { id: "contact", label: "Contact" },
 ];
 
 /** Chapters that are not already in the primary navigation. */
 export const secondaryNav = chapters.filter((c) => !primaryNav.some((p) => p.id === c.id));
+
+/** True when a path is a chapter of the page the visitor is on, so the link can glide there instead of loading a page. */
+export function isInPage(id: NavId, page: Page) {
+  return page === "home" && id !== "packages";
+}
+
+/** The address of a path as seen from a page. From the Packages page, chapters link back to the homepage. */
+export function hrefFor(id: NavId, page: Page) {
+  if (id === "packages") return PACKAGES_PATH;
+  if (page === "home") return `#${id}`;
+  return id === "awakening" ? "/" : `/#${id}`;
+}

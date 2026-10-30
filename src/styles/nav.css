@@ -65,15 +65,15 @@ html {
 
 .site-header__nav {
   display: none;
-  gap: 28px;
+  gap: 26px;
 }
 
 .site-header__nav a {
   position: relative;
   padding: 6px 0;
-  font-size: 0.8125rem;
-  letter-spacing: 0.02em;
-  color: var(--fog);
+  font-size: 0.9375rem;
+  letter-spacing: 0.01em;
+  color: rgba(237, 230, 218, 0.8); /* ivory, a step back: the bar sits on bright skies as well as on charcoal */
   transition: color var(--t-fast) var(--ease-out);
 }
 
@@ -91,17 +91,30 @@ html {
   transition: transform 420ms var(--ease-out);
 }
 
-.site-header__nav a[aria-current="true"],
+.site-header__nav a[aria-current],
 .site-header__nav a:hover,
 .site-header__nav a:focus-visible {
   color: var(--ivory);
 }
 
-.site-header__nav a[aria-current="true"]::after,
 .site-header__nav a:hover::after,
 .site-header__nav a:focus-visible::after {
   transform: scaleX(1);
   transform-origin: left;
+}
+
+/* The current path: one small gold bullet under the word, the menu's bullet in miniature. */
+.site-header__nav a[aria-current]::before,
+.site-header__contact[aria-current]::before {
+  content: "";
+  position: absolute;
+  left: 50%;
+  bottom: -5px;
+  width: 4px;
+  height: 4px;
+  margin-left: -2px;
+  border-radius: 50%;
+  background: var(--gold);
 }
 
 .site-header__right {
@@ -118,8 +131,9 @@ html {
   position: relative;
   display: none;
   padding: 6px 0;
-  font-size: 0.8125rem;
-  letter-spacing: 0.02em;
+  font-size: 0.9375rem;
+  letter-spacing: 0.01em;
+  white-space: nowrap;
   color: var(--ivory);
   transition: color var(--t-fast) var(--ease-out);
 }
@@ -137,7 +151,6 @@ html {
   transition: transform 420ms var(--ease-out);
 }
 
-.site-header__contact[aria-current="true"]::after,
 .site-header__contact:hover::after,
 .site-header__contact:focus-visible::after {
   transform: scaleX(1);
@@ -215,10 +228,14 @@ html {
   opacity: 0.92;
 }
 
-@media (min-width: 960px) {
+/* All seven paths need room to stay truly centred between the mark and the right group. */
+@media (min-width: 1140px) {
   .site-header__nav {
     display: flex;
   }
+}
+
+@media (min-width: 960px) {
   .menu-toggle {
     width: auto;
     padding-inline: 10px;
@@ -237,8 +254,8 @@ html {
   }
 }
 
-/* Without the centre nav (below 960px) the bar is two columns, so the right group meets the gutter. */
-@media (max-width: 959px) {
+/* Without the centre nav the bar is two columns, so the right group meets the gutter. */
+@media (max-width: 1139px) {
   .site-header {
     grid-template-columns: 1fr auto;
   }
@@ -327,15 +344,38 @@ html {
 
 .menu__primary li > a {
   display: grid;
-  grid-template-columns: 2.75rem 1fr;
-  align-items: baseline;
+  grid-template-columns: 2rem 1fr;
+  align-items: center;
   color: var(--fog);
   transition: color 420ms var(--ease-out);
 }
 
-.menu__primary-num {
-  color: var(--fog-dim);
-  font-size: var(--text-caption);
+/* A small circular bullet: a hollow ring at rest, filled under the pointer, gold with a halo when current. */
+.menu__primary-dot {
+  display: block;
+  width: 8px;
+  height: 8px;
+  border: 1px solid var(--gold-dim);
+  border-radius: 50%;
+  transition:
+    background-color 420ms var(--ease-out),
+    border-color 420ms var(--ease-out),
+    box-shadow 420ms var(--ease-out);
+}
+
+.menu__primary li > a:hover .menu__primary-dot,
+.menu__primary li > a:focus-visible .menu__primary-dot {
+  background-color: var(--gold-dim);
+}
+
+.menu__primary li > a[aria-current] {
+  color: var(--ivory);
+}
+
+.menu__primary li > a[aria-current] .menu__primary-dot {
+  background-color: var(--gold);
+  border-color: var(--gold);
+  box-shadow: 0 0 0 4px rgba(200, 156, 98, 0.16);
 }
 
 .menu__primary-mask {
@@ -348,8 +388,8 @@ html {
 
 .menu__primary-inner {
   display: inline-block;
-  /* Fluid with the width, but never so tall that five paths and the foot leave a short screen. */
-  font-size: min(clamp(2.2rem, 1.2rem + 5vw, 4.5rem), 7.6vh);
+  /* Fluid with the width, but never so tall that seven paths and the foot leave a short screen. */
+  font-size: min(clamp(2rem, 1.1rem + 4.2vw, 4rem), 5.7vh);
   line-height: 1.02;
   letter-spacing: -0.01em;
 }
@@ -385,7 +425,7 @@ html {
   align-items: center;
   gap: 16px;
   margin-top: clamp(20px, 3vh, 36px);
-  padding-left: 2.75rem; /* aligns with the primary words, past the numerals */
+  padding-left: 2rem; /* aligns with the primary words, past the bullets */
 }
 
 .menu__book-rule {
@@ -401,9 +441,8 @@ html {
   display: inline-block;
   white-space: nowrap;
   padding: 6px 0;
-  font-family: var(--font-display);
   font-weight: 300;
-  font-size: min(clamp(1.5rem, 1rem + 2.2vw, 2.25rem), 4.6vh);
+  font-size: min(clamp(1.375rem, 1rem + 1.6vw, 2rem), 3.8vh);
   line-height: 1.1;
   color: var(--fog);
   transition: color 420ms var(--ease-out);
@@ -462,13 +501,20 @@ html {
 
 .menu__secondary a {
   display: inline-flex;
+  align-items: center;
   gap: 10px;
   color: var(--fog);
   transition: color var(--t-fast) var(--ease-out);
 }
 
-.menu__secondary a span {
-  color: var(--fog-dim);
+/* The quieter list's bullet: a tiny filled dot. */
+.menu__secondary-dot {
+  display: block;
+  flex: none;
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: var(--gold-dim);
 }
 
 .menu__secondary a:hover,
@@ -482,7 +528,6 @@ html {
   flex-direction: column;
   align-items: flex-start;
   gap: 6px;
-  font-family: var(--font-display);
   font-weight: 300;
   font-size: 1.25rem;
   line-height: 1.3;
@@ -499,7 +544,6 @@ html {
   justify-self: end;
   align-self: start;
   margin-top: -12px; /* centre the 48px control on the two caption lines */
-  font-family: var(--font-body);
 }
 
 @media (max-width: 767px) {
@@ -518,14 +562,14 @@ html {
     padding-block: 2vh;
   }
   .menu__primary li > a {
-    grid-template-columns: 2.25rem 1fr;
+    grid-template-columns: 1.75rem 1fr;
   }
   .menu__primary li + li {
-    margin-top: 14px;
+    margin-top: 10px;
   }
   .menu__book {
-    margin-top: 18px;
-    padding-left: 2.25rem;
+    margin-top: 14px;
+    padding-left: 1.75rem;
   }
   .menu__secondary {
     grid-column: 1 / -1;
@@ -546,7 +590,7 @@ html {
 }
 
 /* Short viewports (landscape phones, small laptops): tighten the rhythm before the panel has to scroll. */
-@media (max-height: 820px) {
+@media (max-height: 920px) {
   .menu__inner {
     row-gap: 16px;
     padding-top: calc(var(--header-h) - 4px);
@@ -572,6 +616,7 @@ html {
 @media (prefers-reduced-motion: reduce) {
   .menu-toggle__line,
   .menu__primary li > a,
+  .menu__primary-dot,
   .menu__primary-mask::after,
   .menu__book-link,
   .menu__book-link::after,

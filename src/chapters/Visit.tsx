@@ -1,11 +1,16 @@
-import { useRef, useState, type FormEvent } from "react";
+import { useRef } from "react";
 import { gsap, SplitText, useGSAP } from "../lib/gsap";
 import { insetClip } from "../lib/clip";
 import { Picture } from "../components/Picture";
-import { site } from "../data/site";
+import { EnquiryAlternatives, EnquiryForm } from "../components/EnquiryForm";
 import type { ImageId } from "../data/assets";
 
 const FILL = { aspectRatio: "auto", width: "100%", height: "100%" } as const;
+
+const INTERESTS = [
+  { value: "Safari", label: "Safari" },
+  { value: "Safari, and news of the resort", label: "Safari, and news of the resort" },
+];
 
 type Props = {
   /** The conceptual bedroom photograph; the vaulted clay room by default. */
@@ -14,21 +19,7 @@ type Props = {
 };
 
 /**
- * Open a URL the way a link would. The site has no backend: a visit request is handed to the
- * visitor's own email app through a pre-filled mailto link. The optional `__mailto` array is a
- * harmless test hook: a browser harness can read the URL it would otherwise have to intercept.
- */
-function navigateTo(url: string) {
-  (window as Window & { __mailto?: string[] }).__mailto?.push(url);
-  window.location.href = url;
-}
-
-function field(data: FormData, key: string) {
-  return String(data.get(key) ?? "").trim();
-}
-
-/**
- * Chapter VII: Book a Visit.
+ * Book a Visit (under the Beyond the Expected eyebrow).
  *
  * The film's one light valley: sand paper, charcoal type. One screen, no scrolling inside the
  * chapter: the vaulted bedroom is a full-height panel bleeding off the left edge (dropped on
@@ -40,7 +31,6 @@ function field(data: FormData, key: string) {
  */
 export function Visit({ image = "beyond-interior", position = "50% 60%" }: Props) {
   const root = useRef<HTMLElement>(null);
-  const [sent, setSent] = useState(false);
 
   useGSAP(
     () => {
@@ -92,33 +82,6 @@ export function Visit({ image = "beyond-interior", position = "50% 60%" }: Props
     { scope: root },
   );
 
-  const onSubmit = (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    const form = e.currentTarget;
-    if (!form.reportValidity()) return;
-
-    const data = new FormData(form);
-    const name = field(data, "name");
-    const message = field(data, "message");
-    const lines = [
-      "Hello LIWA,",
-      "",
-      "I would like to come and see the country.",
-      "",
-      `Name: ${name}`,
-      `Email: ${field(data, "email")}`,
-      `When: ${field(data, "when") || "Not decided yet"}`,
-      `Guests: ${field(data, "guests") || "2"}`,
-      `Interest: ${field(data, "interest") || "Safari"}`,
-    ];
-    if (message) lines.push("", message);
-
-    const subject = encodeURIComponent(`Visit request from ${name}`);
-    const body = encodeURIComponent(lines.join("\r\n"));
-    navigateTo(`mailto:${site.contact.email}?subject=${subject}&body=${body}`);
-    setSent(true);
-  };
-
   return (
     <section id="visit" ref={root} className="visit" aria-labelledby="visit-title">
       <div className="visit__inner gutter">
@@ -134,14 +97,14 @@ export function Visit({ image = "beyond-interior", position = "50% 60%" }: Props
 
         <div className="visit__words">
           <p className="visit__eyebrow scene__eyebrow caption">
-            <span>Book a Visit</span>
-            <span>A safari first, then the house</span>
+            <span>Beyond the Expected</span>
+            <span>Book a visit</span>
           </p>
 
           <h2 id="visit-title" className="visit__headline display display--h2">
-            Come and see{" "}
+            Begin with{" "}
             <br />
-            the country.
+            a conversation.
           </h2>
           <p className="visit__lede lede">
             <span className="visit__lede-long">
@@ -152,78 +115,15 @@ export function Visit({ image = "beyond-interior", position = "50% 60%" }: Props
 
           <span className="visit__rule" aria-hidden="true" />
 
-          <form className="visit__form" noValidate onSubmit={onSubmit}>
-            <div className="visit__fields">
-              <label className="visit__field visit__field--pair">
-                <span className="visit__label caption">Name</span>
-                <input className="visit__input" type="text" name="name" required autoComplete="name" />
-              </label>
-              <label className="visit__field visit__field--pair">
-                <span className="visit__label caption">Email</span>
-                <input className="visit__input" type="email" name="email" required autoComplete="email" inputMode="email" />
-              </label>
-              <label className="visit__field">
-                <span className="visit__label caption">When</span>
-                <input className="visit__input" type="text" name="when" placeholder="e.g. June 2027, or a season" />
-              </label>
-              <label className="visit__field">
-                <span className="visit__label caption">Guests</span>
-                <input className="visit__input" type="number" name="guests" min={1} max={12} defaultValue={2} inputMode="numeric" />
-              </label>
+          <EnquiryForm
+            interests={INTERESTS}
+            subject="Visit request from"
+            opening="I would like to plan a visit with LIWA."
+            submitLabel="Send request"
+            restingNote="This opens your email app with the request written for you. Nothing is stored on this site."
+          />
 
-              <fieldset className="visit__field visit__field--wide visit__chips">
-                <legend className="visit__label visit__legend caption">Interest</legend>
-                <div className="visit__chip-row">
-                  <label className="visit__chip">
-                    <input type="radio" name="interest" value="Safari" defaultChecked />
-                    <span>Safari</span>
-                  </label>
-                  <label className="visit__chip">
-                    <input type="radio" name="interest" value="Safari and the resort vision" />
-                    <span>Safari and the resort vision</span>
-                  </label>
-                </div>
-              </fieldset>
-
-              <label className="visit__field visit__field--wide">
-                <span className="visit__label caption">
-                  Message <span className="visit__optional">(optional)</span>
-                </span>
-                <textarea className="visit__input visit__textarea" name="message" rows={2} />
-              </label>
-            </div>
-
-            <div className="visit__submit-row">
-              <button type="submit" className="visit__submit">
-                Send request
-              </button>
-              <p className={["visit__note", "caption", sent ? "is-sent" : ""].join(" ").trim()} role="status" aria-live="polite">
-                {sent ? (
-                  <>
-                    Your email app should open now. If it did not, write to{" "}
-                    <a className="link" href={`mailto:${site.contact.email}`}>
-                      {site.contact.email}
-                    </a>
-                    .
-                  </>
-                ) : (
-                  "This opens your email app with the request written for you. Nothing is stored on this site."
-                )}
-              </p>
-            </div>
-          </form>
-
-          <p className="visit__alt caption">
-            Or write to{" "}
-            <a className="link" href={`mailto:${site.contact.email}`}>
-              {site.contact.email}
-            </a>
-            , or call{" "}
-            <a className="link" href={site.contact.phoneHref}>
-              {site.contact.phoneDisplay}
-            </a>
-            .
-          </p>
+          <EnquiryAlternatives />
         </div>
       </div>
     </section>

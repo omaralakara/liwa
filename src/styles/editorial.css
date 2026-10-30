@@ -1,8 +1,8 @@
-/* ---------- Editorial chapters (IV The Land, V Moments of Wonder) ----------
+/* ---------- Editorial chapters (The Land, Moments of Wonder) ----------
    The quiet chapters. No pins, no scrubbed cameras: composition, photography and type.
    Reveal windows (clip-path) live on unscaled wrappers; the settle happens on the media inside. */
 
-/* ---------- Chapter III: The Land ---------- */
+/* ---------- The Land ---------- */
 
 .land {
   position: relative;
@@ -128,7 +128,7 @@
   }
 }
 
-/* ---------- Chapter IV: Moments of Wonder ---------- */
+/* ---------- Moments of Wonder ---------- */
 /* Full-bleed moments in the film's own language: photograph, night grade, type on the image. */
 
 .wonder {
@@ -192,7 +192,6 @@
 
 .wonder__caption {
   max-width: 26rem;
-  font-family: var(--font-display);
   font-style: italic;
   font-weight: 400;
   font-size: 1.125rem;

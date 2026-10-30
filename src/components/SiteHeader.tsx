@@ -2,7 +2,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { Mark } from "./Mark";
 import { MenuOverlay } from "./MenuOverlay";
 import { SoundToggle } from "./SoundToggle";
-import { chapters, primaryNav, type ChapterId } from "../data/site";
+import { chapters, hrefFor, isInPage, primaryNav, type ChapterId, type NavId, type Page } from "../data/site";
 import { lockScroll, scrollToId } from "../lib/smooth";
 
 function onAnchorClick(e: React.MouseEvent<HTMLAnchorElement>) {
@@ -13,70 +13,81 @@ function onAnchorClick(e: React.MouseEvent<HTMLAnchorElement>) {
   history.replaceState(null, "", href);
 }
 
-/** Which primary path a chapter belongs to, for the header's current marker. */
-const primaryOf: Record<ChapterId, ChapterId | null> = {
-  awakening: null,
+/** Which primary path a chapter belongs to, for the current marker. */
+const primaryOf: Record<ChapterId, NavId | null> = {
+  awakening: "awakening",
   about: "about",
   wild: "wild",
   land: "wild",
   wonder: "wild",
-  vision: "vision",
+  resort: "resort",
+  gallery: "gallery",
   visit: null,
   invitation: "contact",
   contact: "contact",
 };
 
-/** The centre list omits Home: the mark already leads there. */
-const centreNav = primaryNav.filter((p) => p.id !== "awakening");
-
 /**
- * One slim fixed bar: the mark, the four primary paths (large screens), the "Book a visit" link
- * and a two-line menu control that opens the full chapter list. Transparent over the hero; a solid
- * charcoal strip once the hero has gone. The menu overlay is rendered here, at body level,
- * so it can never sit beneath a pinned chapter.
+ * One slim fixed bar: the mark, the seven primary paths (large screens), the "Book a visit" link
+ * and a two-line menu control that opens the full list. Transparent over the first section; a solid
+ * charcoal strip once it has gone. The same header serves both pages: chapters of the page the
+ * visitor is on glide there, everything else is an ordinary link. The menu overlay is rendered
+ * here, at body level, so it can never sit beneath a pinned chapter.
  */
-export function SiteHeader() {
+export function SiteHeader({ page }: { page: Page }) {
   const toggleRef = useRef<HTMLButtonElement>(null);
   const [active, setActive] = useState<ChapterId>("awakening");
   const [past, setPast] = useState(false);
   const [open, setOpen] = useState(false);
 
   useEffect(() => {
-    const sections = chapters.map((c) => document.getElementById(c.id)).filter((el): el is HTMLElement => Boolean(el));
-    if (!sections.length || !("IntersectionObserver" in window)) return;
-    // Every chapter currently inside the centre band, so a lone "left the band" entry still
-    // resolves to whichever chapter remains (a batch only carries the chapters that changed).
-    const inBand = new Map<string, number>();
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((e) => {
-          if (e.isIntersecting) inBand.set(e.target.id, e.intersectionRatio);
-          else inBand.delete(e.target.id);
-        });
-        let best: string | null = null;
-        let bestRatio = -1;
-        inBand.forEach((ratio, id) => {
-          if (ratio > bestRatio) {
-            best = id;
-            bestRatio = ratio;
-          }
-        });
-        if (best) setActive(best as ChapterId);
-      },
-      { rootMargin: "-45% 0px -45% 0px", threshold: [0, 0.1, 0.5] },
-    );
-    sections.forEach((s) => observer.observe(s));
+    const observers: IntersectionObserver[] = [];
+    if (!("IntersectionObserver" in window)) return;
 
-    const hero = document.getElementById("awakening");
-    let heroObserver: IntersectionObserver | undefined;
-    if (hero) {
-      heroObserver = new IntersectionObserver(([e]) => setPast(!e.isIntersecting), { rootMargin: "-80px 0px 0px 0px", threshold: 0 });
-      heroObserver.observe(hero);
+    const sections = chapters.map((c) => document.getElementById(c.id)).filter((el): el is HTMLElement => Boolean(el));
+    if (sections.length) {
+      // Every chapter currently inside the centre band, so a lone "left the band" entry still
+      // resolves to whichever chapter remains (a batch only carries the chapters that changed).
+      const inBand = new Map<string, number>();
+      const observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((e) => {
+            if (e.isIntersecting) inBand.set(e.target.id, e.intersectionRatio);
+            else inBand.delete(e.target.id);
+          });
+          let best: string | null = null;
+          let bestRatio = -1;
+          inBand.forEach((ratio, id) => {
+            if (ratio > bestRatio) {
+              best = id;
+              bestRatio = ratio;
+            }
+          });
+          if (best) setActive(best as ChapterId);
+        },
+        { rootMargin: "-45% 0px -45% 0px", threshold: [0, 0.1, 0.5] },
+      );
+      sections.forEach((s) => observer.observe(s));
+      observers.push(observer);
     }
-    return () => {
-      observer.disconnect();
-      heroObserver?.disconnect();
+
+    // The bar turns solid once the page's first section has gone.
+    const first = document.querySelector("main section");
+    if (first) {
+      const firstObserver = new IntersectionObserver(([e]) => setPast(!e.isIntersecting), { rootMargin: "-80px 0px 0px 0px", threshold: 0 });
+      firstObserver.observe(first);
+      observers.push(firstObserver);
+    }
+    return () => observers.forEach((o) => o.disconnect());
+  }, []);
+
+  // Coming back through the browser's history restores this page as it was left: never with the menu open.
+  useEffect(() => {
+    const onPageShow = (e: PageTransitionEvent) => {
+      if (e.persisted) setOpen(false);
     };
+    window.addEventListener("pageshow", onPageShow);
+    return () => window.removeEventListener("pageshow", onPageShow);
   }, []);
 
   const close = useCallback(() => setOpen(false), []);
@@ -92,7 +103,7 @@ export function SiteHeader() {
   }, []);
 
   const onBrandClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
-    if (open && !e.metaKey && !e.ctrlKey) {
+    if (open && isInPage("awakening", page) && !e.metaKey && !e.ctrlKey) {
       e.preventDefault();
       travel("awakening");
       return;
@@ -100,23 +111,29 @@ export function SiteHeader() {
     onAnchorClick(e);
   };
 
-  const current = primaryOf[active];
+  const current: NavId | null = page === "packages" ? "packages" : primaryOf[active];
+  const visitCurrent = page === "home" && active === "visit";
   const className = ["site-header", past ? "is-past-hero" : "", open ? "is-menu-open" : ""].join(" ").trim();
 
   return (
     <header className={className}>
-      <a className="site-header__brand" href="#awakening" aria-label="LIWA Safari, back to the beginning" onClick={onBrandClick}>
+      <a className="site-header__brand" href={hrefFor("awakening", page)} aria-label="LIWA Safari, home" onClick={onBrandClick}>
         <Mark />
       </a>
       <nav className="site-header__nav" aria-label="Primary">
-        {centreNav.map((p) => (
-          <a key={p.id} href={`#${p.id}`} aria-current={current === p.id ? "true" : undefined} onClick={onAnchorClick}>
+        {primaryNav.map((p) => (
+          <a
+            key={p.id}
+            href={hrefFor(p.id, page)}
+            aria-current={current === p.id ? (p.id === "packages" ? "page" : "true") : undefined}
+            onClick={onAnchorClick}
+          >
             {p.label}
           </a>
         ))}
       </nav>
       <div className="site-header__right">
-        <a className="site-header__contact" href="#visit" aria-current={active === "visit" ? "true" : undefined} onClick={onAnchorClick}>
+        <a className="site-header__contact" href={hrefFor("visit", page)} aria-current={visitCurrent ? "true" : undefined} onClick={onAnchorClick}>
           Book a visit
         </a>
         <SoundToggle variant="header" />
@@ -142,7 +159,7 @@ export function SiteHeader() {
           </span>
         </button>
       </div>
-      <MenuOverlay open={open} toggleRef={toggleRef} onClose={close} onSelect={travel} />
+      <MenuOverlay open={open} page={page} current={current} toggleRef={toggleRef} onClose={close} onSelect={travel} />
     </header>
   );
 }

@@ -110,13 +110,13 @@ function focalOf(position: string | undefined, fallback: number) {
 }
 
 /**
- * Chapter II: About LIWA. One Horizon.
+ * About LIWA. One Horizon.
  *
  * A gold hairline is drawn across the frame; the wild photograph opens out of it. One nudge of
  * the scroll slides a lamp-lit house in from the right along the same line, its lamp coming on
  * as it settles. The headline stands on the line: roman on the wild side, italic on the house
  * side. Safari and the planned resort end as two photographs sharing one horizon. Below the
- * frame, a short body says it in plain words.
+ * frame, a short body says what LIWA believes, in plain words.
  */
 export function About({
   wild,
@@ -378,7 +378,7 @@ export function About({
 
         <p className="scene__eyebrow about__eyebrow caption">
           <span>About LIWA</span>
-          <span>A safari, and the plan for a resort</span>
+          <span>Safari, resort and respect for the land</span>
         </p>
 
         <div className="about__text">
@@ -389,14 +389,14 @@ export function About({
               comes first.
             </span>{" "}
             <span className="about__half about__half--house display--italic">
-              Then a house{" "}
+              Then a place{" "}
               <br />
               to come back to.
             </span>
           </h2>
           <p className="about__lede lede">
-            LIWA is a luxury safari brand for Namibia. The days belong to the open country and its animals. The resort
-            is the other half of the plan: a lamp lit when the light goes.
+            LIWA is a luxury safari and resort brand for Namibia. The days belong to open country and its animals. The
+            resort we are planning is where they will end, in comfort and with care for the land.
           </p>
         </div>
 
@@ -406,12 +406,11 @@ export function About({
       <div className="about__body gutter cols">
         <span className="about__rule" aria-hidden="true" />
         <p className="about__statement lede">
-          LIWA is two things that need each other. The wild you go out into in the morning, and a house to come back
-          to at dusk.
+          We start from one belief: the wild matters more than our visit to it.
         </p>
         <p className="about__note body">
-          The first is already there. Namibia has been a safari country for a long time. The second is what we are
-          working toward: a resort in the desert, run the way a Gulf household receives a guest.
+          So we want a safari that is unhurried and keeps its distance from the animals, and a resort with real comfort
+          that sits lightly on the land. Guests should leave closer to this place, and the place should stay as it was.
         </p>
       </div>
     </section>

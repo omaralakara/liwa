@@ -18,9 +18,9 @@ let instance: Lenis | null = null;
  * and leave them on the first open frame (the same rest points the snap uses), so the scene
  * animates itself into place on arrival instead of waiting for a nudge.
  */
-const LANDING: Record<string, number> = { wild: 0.62, vision: 0.8, about: 0.72 };
+const LANDING: Record<string, number> = { wild: 0.62, resort: 0.8, about: 0.72 };
 
-export function scrollToId(id: string) {
+export function scrollToId(id: string, { immediate = false }: { immediate?: boolean } = {}) {
   const el = document.getElementById(id);
   if (!el) return;
   // Move the keyboard's starting point with the view: the next Tab continues from this chapter,
@@ -36,8 +36,53 @@ export function scrollToId(id: string) {
     const pin = pinned ? spacer.offsetHeight - pinned.offsetHeight : 0;
     top += Math.max(0, pin) * (LANDING[id] ?? 0);
   }
-  if (instance) instance.scrollTo(top, { duration: 1.6 });
-  else window.scrollTo({ top, behavior: "smooth" });
+  if (instance) {
+    // Pins and fonts change the page's height, and Lenis clamps a jump to the height it last measured.
+    instance.resize();
+    instance.scrollTo(top, immediate ? { immediate: true, force: true } : { duration: 1.6 });
+  } else window.scrollTo({ top, behavior: immediate ? "instant" : "smooth" });
+}
+
+/**
+ * A page opened on a chapter's address (the Packages page links home this way). The jump waits for
+ * the fonts and the first measure of the pins, then lands exactly where a link on this page would.
+ * The page stays covered until then, so the title sequence never flashes past. An address changed
+ * by hand later lands the same way, since the browser's own jump stops on a pinned chapter's closed
+ * first frame. Returns a cancel.
+ */
+export function landOnHash(): () => void {
+  const onHashChange = () => scrollToId(window.location.hash.slice(1), { immediate: true });
+  window.addEventListener("hashchange", onHashChange);
+  const stopListening = () => window.removeEventListener("hashchange", onHashChange);
+
+  const id = window.location.hash.slice(1);
+  if (!id || id === "awakening" || !document.getElementById(id)) return stopListening;
+
+  const root = document.documentElement;
+  root.classList.add("is-landing");
+  let cancelled = false;
+  let landedAt = -1;
+  const land = () => {
+    ScrollTrigger.refresh();
+    root.classList.remove("is-landing"); // first: a hidden chapter cannot take focus
+    scrollToId(id, { immediate: true });
+    landedAt = window.scrollY;
+  };
+  const loaded = document.readyState === "complete" ? Promise.resolve() : new Promise((done) => window.addEventListener("load", done, { once: true }));
+  const ready = Promise.all([loaded, document.fonts.ready]);
+  const patience = new Promise((done) => window.setTimeout(done, 1800));
+  Promise.race([ready, patience]).then(() => {
+    if (!cancelled) land();
+  });
+  // On a slow connection the jump came first: measure again once the fonts are in, unless the visitor has moved on.
+  ready.then(() => {
+    if (!cancelled && landedAt === window.scrollY) land();
+  });
+  return () => {
+    cancelled = true;
+    stopListening();
+    root.classList.remove("is-landing");
+  };
 }
 
 /**

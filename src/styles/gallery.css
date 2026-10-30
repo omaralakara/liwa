@@ -1,0 +1,733 @@
+/* ---------- Gallery ----------
+   A still-photography spread on the charcoal ground, in two movements. Not a grid of pictures: plates
+   of very different sizes on the 12-column grid, some bleeding off the page, one over the corner of
+   another, with empty columns and tall pauses between them. A plate is described by a few variables
+   (--ratio, --focus, --zoom, --bleed-l, --bleed-r, --mat, and --frame, --cap for its two parts on
+   the plate's own columns); tablets and phones recompose the spread by changing those and the columns.
+   Reveal windows (clip-path) live on unscaled wrappers, the settle on the media inside, the hover on
+   the picture inside that. */
+
+.gallery {
+  --gallery-pause: clamp(72px, 16vh, 176px);
+  --gallery-mat: clamp(8px, 0.8vw, 12px);
+  position: relative;
+  overflow: clip;
+  padding-top: calc(var(--header-h) + clamp(88px, 14vh, 150px));
+  padding-bottom: clamp(120px, 24vh, 260px);
+  background: var(--charcoal);
+  color: var(--ivory);
+}
+
+/* ---------- The opening words ---------- */
+
+.gallery__head {
+  align-items: end;
+  row-gap: 20px;
+}
+
+.gallery__headline {
+  grid-column: 1 / span 10;
+  grid-row: 1;
+  font-size: clamp(3rem, 1.2rem + 6vw, 8.5rem);
+}
+
+.gallery__note {
+  grid-column: 10 / -1;
+  grid-row: 1;
+  padding-bottom: 0.7em;
+}
+
+.gallery__title {
+  font-size: clamp(3rem, 0.6rem + 5.3vw, 7.5rem);
+  line-height: 1;
+  white-space: nowrap;
+}
+
+.gallery__line {
+  max-width: 15ch;
+  color: rgba(237, 230, 218, 0.9);
+}
+
+/* Italic overhangs its own box on both sides: the line masks need a little air, or they cut the serifs */
+.gallery__title .scene__line-mask,
+.gallery__line .scene__line-mask {
+  margin-left: -0.12em;
+  padding-inline: 0.12em;
+}
+
+.gallery__spread {
+  align-items: start;
+  margin-top: var(--gallery-pause);
+}
+
+/* ---------- A plate ---------- */
+
+/* Only the photograph and its words take the pointer: a plate's empty columns may lie over its neighbour */
+.gallery__plate {
+  display: grid;
+  grid-template-columns: subgrid;
+  align-content: start;
+  min-width: 0;
+  margin: 0;
+  pointer-events: none;
+}
+
+.gallery__frame {
+  grid-column: var(--frame, 1 / -1);
+  grid-row: var(--frame-row, 1);
+  position: relative;
+  justify-self: start;
+  /* A definite width, so that on a very wide, short screen the height limit crops the plate instead of narrowing it */
+  width: calc(100% + var(--gutter) * var(--bleed-l, 0) + var(--gutter) * var(--bleed-r, 0) + 2 * var(--mat, 0px));
+  aspect-ratio: var(--ratio, 3 / 2);
+  max-height: max(94vh, 520px);
+  margin-top: calc(-1 * var(--mat, 0px));
+  margin-right: calc(-1 * var(--gutter) * var(--bleed-r, 0) - var(--mat, 0px));
+  margin-bottom: calc(-1 * var(--mat, 0px));
+  margin-left: calc(-1 * var(--gutter) * var(--bleed-l, 0) - var(--mat, 0px));
+}
+
+/* Lying over the plate: real, focusable, and held in from the page's edge so its focus ring stays on screen */
+.gallery__open {
+  position: absolute;
+  top: var(--mat, 0px);
+  right: calc(var(--mat, 0px) + 6px * var(--bleed-r, 0));
+  bottom: var(--mat, 0px);
+  left: calc(var(--mat, 0px) + 6px * var(--bleed-l, 0));
+  z-index: 1;
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: zoom-in;
+  pointer-events: auto;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* The mat belongs to the window, so a plate that lies over another arrives with its own edge */
+.gallery__window {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  border: var(--mat, 0px) solid var(--charcoal);
+}
+
+.gallery__media {
+  position: absolute;
+  inset: 0;
+  transform-origin: 50% 50%;
+}
+
+.gallery__media .picture {
+  position: absolute;
+  inset: 0;
+  transform: scale(var(--zoom, 1));
+  transform-origin: var(--focus, 50% 50%);
+  transition: transform 1.2s var(--ease-out);
+}
+
+.gallery__media img {
+  object-position: var(--focus, 50% 50%);
+}
+
+/* The film's night grade, a lighter touch: these are stills, to be looked at */
+.gallery__grade {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(130% 110% at 50% 46%, transparent 56%, rgba(10, 9, 8, 0.34) 100%),
+    rgba(20, 19, 17, 0.06);
+}
+
+.gallery__caption {
+  grid-column: var(--cap, 1 / -1);
+  grid-row: var(--cap-row, 2);
+  align-self: var(--cap-align, start);
+  position: relative;
+  padding-top: 14px;
+  font-style: italic;
+  font-size: 1.0625rem;
+  line-height: 1.4;
+  text-wrap: balance;
+  pointer-events: auto;
+  transition: color 600ms var(--ease-out);
+}
+
+/* The gold hairline: draws from the left on hover, retracts to the right on leave */
+.gallery__caption::before {
+  content: "";
+  position: absolute;
+  top: 6px;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: var(--gold);
+  transform: scaleX(0);
+  transform-origin: right;
+  transition: transform 720ms var(--ease-out);
+}
+
+.gallery__open:focus-visible ~ .gallery__window .picture {
+  transform: scale(calc(var(--zoom, 1) * 1.03));
+}
+
+.gallery__frame:has(.gallery__open:focus-visible) + .gallery__caption {
+  color: var(--ivory);
+}
+
+.gallery__frame:has(.gallery__open:focus-visible) + .gallery__caption::before {
+  transform: scaleX(1);
+  transform-origin: left;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .gallery__open:hover ~ .gallery__window .picture {
+    transform: scale(calc(var(--zoom, 1) * 1.03));
+  }
+
+  .gallery__frame:has(.gallery__open:hover) + .gallery__caption {
+    color: var(--ivory);
+  }
+
+  .gallery__frame:has(.gallery__open:hover) + .gallery__caption::before {
+    transform: scaleX(1);
+    transform-origin: left;
+  }
+}
+
+/* ---------- The wild ---------- */
+
+.gallery__title--wild {
+  grid-column: 1 / span 3;
+  grid-row: 1;
+}
+
+/* Immense: the sundown leaves the page on the right */
+.gallery__plate--quiver {
+  --ratio: 3 / 2;
+  --bleed-r: 1;
+  --cap: 2 / span 5;
+  grid-column: 4 / -1;
+  grid-row: 1;
+}
+
+/* The portrait over the landscape's corner, on a thin charcoal mat */
+.gallery__plate--rhino {
+  --ratio: 4 / 5;
+  --mat: var(--gallery-mat);
+  grid-column: 1 / span 4;
+  grid-row: 1;
+  z-index: 2;
+  margin-top: 25vw;
+}
+
+/* Small: the crescent alone, out of the dune sea. It climbs into the empty columns beside the rhino. */
+.gallery__spread--dunes {
+  margin-top: 0;
+}
+
+.gallery__plate--dunes {
+  --ratio: 5 / 4;
+  --focus: 66% 37%;
+  --zoom: 2.2;
+  grid-column: 9 / span 3;
+  grid-row: 1;
+  margin-top: -5vw;
+}
+
+.gallery__line--wild {
+  grid-column: 2 / span 6;
+  grid-row: 1;
+  margin-top: var(--gallery-pause);
+}
+
+/* A long low band of the herd, no sky, off the left edge */
+.gallery__plate--herd {
+  --ratio: 3 / 1;
+  --focus: 50% 86%;
+  --bleed-l: 1;
+  --cap: 7 / span 4;
+  grid-column: 1 / span 10;
+}
+
+.gallery__plate--tree {
+  --ratio: 3 / 4;
+  --focus: 50% 72%;
+  --bleed-r: 1;
+  grid-column: 8 / -1;
+  grid-row: 1;
+}
+
+/* The caption stands in the empty columns beside the lion */
+.gallery__plate--lion {
+  --ratio: 4 / 5;
+  --focus: 59% 85%;
+  --zoom: 1.35;
+  --frame: 1 / span 4;
+  --cap: 5 / span 2;
+  --cap-row: 1;
+  --cap-align: end;
+  grid-column: 2 / span 6;
+  grid-row: 1;
+  margin-top: 22vw;
+}
+
+.gallery__spread--ostriches {
+  margin-top: calc(var(--gallery-pause) * 0.35);
+}
+
+.gallery__plate--ostriches {
+  --ratio: 4 / 5;
+  --focus: 77% 30%;
+  --zoom: 1.25;
+  grid-column: 7 / span 3;
+}
+
+/* The breath: the single full-bleed photograph, all ground and no sky, over-scanned so its drift never shows an edge */
+.gallery__plate--oryx {
+  --focus: 30% 100%;
+  --zoom: 1.32;
+  --bleed-l: 1;
+  --bleed-r: 1;
+  --cap: 9 / -1;
+  grid-column: 1 / -1;
+}
+
+.gallery__plate--oryx .gallery__frame {
+  aspect-ratio: auto;
+  height: clamp(420px, 78vh, 880px);
+}
+
+.gallery__plate--oryx .gallery__media {
+  inset: -6% 0;
+  will-change: transform;
+}
+
+/* ---------- The resort ---------- */
+
+.gallery__spread--resort {
+  grid-template-rows: auto 1fr;
+  margin-top: calc(var(--gallery-pause) * 1.5);
+}
+
+.gallery__title--resort {
+  grid-column: 8 / -1;
+  grid-row: 1;
+}
+
+.gallery__plate--arch {
+  --ratio: 2 / 3;
+  --focus: 50% 0%;
+  --bleed-l: 1;
+  grid-column: 1 / span 5;
+  grid-row: 1 / span 2;
+}
+
+.gallery__plate--weave {
+  --ratio: 3 / 2;
+  grid-column: 8 / span 3;
+  grid-row: 2;
+  align-self: end;
+}
+
+.gallery__spread--vessel {
+  grid-template-rows: auto 1fr;
+}
+
+.gallery__line--resort {
+  grid-column: 1 / span 6;
+  grid-row: 1;
+}
+
+.gallery__plate--vessel {
+  --ratio: 4 / 5;
+  --focus: 50% 100%;
+  --bleed-r: 1;
+  grid-column: 7 / -1;
+  grid-row: 1 / span 2;
+}
+
+.gallery__plate--curve {
+  --ratio: 3 / 4;
+  --focus: 100% 66%;
+  --zoom: 1.5;
+  grid-column: 2 / span 3;
+  grid-row: 2;
+  align-self: end;
+  margin-top: clamp(24px, 5vh, 48px);
+}
+
+/* The closing spread rhymes with the opening one: a wide plate, a portrait over its corner */
+.gallery__plate--arches {
+  --ratio: 2.2 / 1;
+  --focus: 50% 82%;
+  --bleed-l: 1;
+  grid-column: 1 / span 9;
+  grid-row: 1;
+}
+
+.gallery__plate--table {
+  --ratio: 4 / 5;
+  --focus: 50% 45%;
+  --mat: var(--gallery-mat);
+  grid-column: 9 / span 4;
+  grid-row: 1;
+  z-index: 2;
+  margin-top: 21vw;
+}
+
+/* The illustration notice: in the flow, readable, and quiet */
+.gallery__notice {
+  grid-column: 1 / span 5;
+  grid-row: 1;
+  align-self: end;
+  padding-top: 16px;
+  border-top: 1px solid var(--gold-dim);
+}
+
+/* ---------- Tablets: the same spreads, recomposed for fewer pixels per column ---------- */
+
+@media (max-width: 1100px) {
+  .gallery__headline {
+    grid-column: 1 / -1;
+  }
+
+  .gallery__note {
+    grid-column: 1 / span 6;
+    grid-row: 2;
+    padding-bottom: 0;
+  }
+
+  .gallery__title {
+    font-size: clamp(3rem, 1.2rem + 5.4vw, 4.75rem);
+  }
+
+  .gallery__title--wild {
+    grid-column: 1 / -1;
+    margin-bottom: clamp(20px, 3vh, 32px);
+  }
+
+  .gallery__plate--quiver {
+    --cap: 3 / span 6;
+    grid-column: 3 / -1;
+    grid-row: 2;
+  }
+
+  .gallery__plate--rhino {
+    grid-row: 2;
+    margin-top: 27vw;
+  }
+
+  .gallery__plate--dunes {
+    --ratio: 1 / 1;
+    --zoom: 2;
+    grid-column: 9 / span 4;
+    margin-top: -3vw;
+  }
+
+  .gallery__line--wild {
+    grid-column: 1 / span 7;
+  }
+
+  .gallery__plate--herd {
+    --ratio: 2.8 / 1;
+    --cap: 7 / span 5;
+    grid-column: 1 / span 11;
+  }
+
+  .gallery__plate--tree {
+    grid-column: 7 / -1;
+  }
+
+  .gallery__plate--lion {
+    --frame: 1 / -1;
+    --cap: 1 / -1;
+    --cap-row: 2;
+    --cap-align: start;
+    grid-column: 1 / span 5;
+    margin-top: 30vw;
+  }
+
+  .gallery__plate--ostriches {
+    grid-column: 4 / span 4;
+  }
+
+  .gallery__plate--oryx {
+    --cap: 7 / -1;
+  }
+
+  .gallery__plate--oryx .gallery__frame {
+    height: clamp(360px, 62vh, 700px);
+  }
+
+  .gallery__plate--arch {
+    grid-column: 1 / span 6;
+  }
+
+  .gallery__plate--weave {
+    grid-column: 8 / span 5;
+  }
+
+  .gallery__line {
+    font-size: clamp(2.125rem, 1rem + 3.4vw, 3rem);
+  }
+
+  .gallery__line--resort {
+    grid-column: 1 / span 5;
+  }
+
+  .gallery__plate--vessel {
+    grid-column: 6 / -1;
+  }
+
+  .gallery__plate--curve {
+    grid-column: 2 / span 4;
+  }
+
+  .gallery__plate--arches {
+    --ratio: 2.2 / 1;
+    --focus: 50% 82%;
+    grid-column: 1 / span 10;
+  }
+
+  .gallery__plate--table {
+    grid-column: 8 / span 5;
+    margin-top: 24vw;
+  }
+
+  .gallery__notice {
+    grid-column: 1 / span 6;
+  }
+}
+
+/* ---------- Phones: not a stack of full-width pictures. Full-bleed, then a portrait to the right, then a
+   small one to the left with its words in the empty space beside it, small overlaps, real pauses. ---------- */
+
+@media (max-width: 767px) {
+  .gallery {
+    --gallery-pause: clamp(56px, 11vh, 92px);
+    padding-top: calc(var(--header-h) + 104px);
+    padding-bottom: clamp(96px, 16vh, 140px);
+  }
+
+  .gallery__head {
+    row-gap: 18px;
+  }
+
+  .gallery__headline {
+    font-size: clamp(2.9rem, 1rem + 11vw, 4.6rem);
+  }
+
+  .gallery__note {
+    grid-column: 1 / span 10;
+  }
+
+  .gallery__title {
+    font-size: clamp(3rem, 1.4rem + 8vw, 4.5rem);
+  }
+
+  /* Every plate takes the whole grid; its frame and words find their columns inside it */
+  .gallery__spread {
+    grid-template-rows: none;
+  }
+
+  .gallery__plate {
+    grid-column: 1 / -1;
+    grid-row: auto;
+    align-self: start;
+    margin-top: 0;
+  }
+
+  .gallery__caption {
+    font-size: 1rem;
+    padding-top: 10px;
+  }
+
+  .gallery__caption::before {
+    top: 4px;
+  }
+
+  /* The words beside a small plate stand at its foot, in the empty space */
+  .gallery__plate--dunes,
+  .gallery__plate--lion,
+  .gallery__plate--ostriches,
+  .gallery__plate--weave,
+  .gallery__plate--curve {
+    --cap-row: 1;
+    --cap-align: end;
+  }
+
+  /* ---------- The wild ---------- */
+
+  .gallery__title--wild {
+    grid-column: 1 / -1;
+    margin-bottom: 10px;
+  }
+
+  /* Full-bleed; its words stand above it, because the rhino lies over its foot */
+  .gallery__plate--quiver {
+    --ratio: 5 / 4;
+    --focus: 62% 30%;
+    --bleed-l: 1;
+    --frame-row: 2;
+    --cap: 3 / -1;
+    --cap-row: 1;
+  }
+
+  .gallery__plate--quiver .gallery__caption {
+    padding: 0 0 10px;
+    text-align: right;
+  }
+
+  .gallery__plate--quiver .gallery__caption::before {
+    display: none;
+  }
+
+  .gallery__plate--rhino {
+    --frame: 4 / -1;
+    --cap: 4 / -1;
+    --bleed-r: 1;
+    margin-top: -40px;
+  }
+
+  .gallery__spread--dunes {
+    margin-top: var(--gallery-pause);
+  }
+
+  .gallery__plate--dunes {
+    --ratio: 1 / 1;
+    --focus: 64% 34%;
+    --zoom: 2;
+    --bleed-l: 1;
+    --frame: 1 / span 7;
+    --cap: 8 / -1;
+  }
+
+  .gallery__line {
+    font-size: var(--text-h3);
+  }
+
+  .gallery__line--wild {
+    grid-column: 3 / -1;
+    grid-row: 2;
+    margin-top: var(--gallery-pause);
+  }
+
+  /* Closer: the animals walk off both edges of the page, and the mountains stay out of it */
+  .gallery__plate--herd {
+    --ratio: 16 / 9;
+    --focus: 19% 79%;
+    --zoom: 1.7;
+    --bleed-r: 1;
+    --cap: 4 / -1;
+  }
+
+  .gallery__plate--tree {
+    --focus: 45% 76%;
+    --frame: 1 / span 9;
+    --cap: 1 / span 5;
+    --bleed-l: 1;
+    --bleed-r: 0;
+  }
+
+  /* A small overlap: the lion's corner over the tree's. The pull reaches past the tree's caption, which stands to its left. */
+  .gallery__plate--lion {
+    --frame: 6 / -1;
+    --cap: 1 / span 5;
+    --mat: var(--gallery-mat);
+    --bleed-r: 1;
+    z-index: 2;
+    margin-top: -88px;
+  }
+
+  .gallery__spread--ostriches {
+    margin-top: var(--gallery-pause);
+  }
+
+  .gallery__plate--ostriches {
+    --frame: 1 / span 7;
+    --cap: 8 / -1;
+    --bleed-l: 1;
+  }
+
+  .gallery__plate--oryx {
+    --focus: 21% 100%;
+    --zoom: 1.6;
+    --cap: 5 / -1;
+  }
+
+  .gallery__plate--oryx .gallery__frame {
+    aspect-ratio: 4 / 5;
+    height: auto;
+  }
+
+  /* ---------- The resort ---------- */
+
+  .gallery__spread--resort {
+    margin-top: calc(var(--gallery-pause) * 1.4);
+  }
+
+  .gallery__title--resort {
+    grid-column: 1 / -1;
+    margin-bottom: 18px;
+    text-align: right;
+  }
+
+  .gallery__plate--arch {
+    --frame: 1 / span 10;
+    --cap: 1 / span 10;
+  }
+
+  .gallery__plate--weave {
+    --ratio: 4 / 3;
+    --frame: 6 / -1;
+    --cap: 1 / span 5;
+    --bleed-r: 1;
+    margin-top: 28px;
+  }
+
+  .gallery__line--resort {
+    grid-column: 1 / span 11;
+  }
+
+  .gallery__plate--vessel {
+    --frame: 2 / -1;
+    --cap: 2 / -1;
+    margin-top: 28px;
+  }
+
+  .gallery__plate--curve {
+    --frame: 1 / span 7;
+    --cap: 8 / -1;
+    --bleed-l: 1;
+    margin-top: var(--gallery-pause);
+  }
+
+  .gallery__plate--arches {
+    --ratio: 2.1 / 1;
+    --focus: 50% 84%;
+    --bleed-r: 1;
+    --cap: 1 / span 4;
+  }
+
+  .gallery__plate--table {
+    --frame: 5 / -1;
+    --cap: 5 / -1;
+    --bleed-r: 1;
+    margin-top: -104px;
+  }
+
+  .gallery__notice {
+    grid-column: 1 / -1;
+    grid-row: auto;
+    margin-top: var(--gallery-pause);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .gallery__media .picture,
+  .gallery__caption,
+  .gallery__caption::before {
+    transition: none;
+  }
+}

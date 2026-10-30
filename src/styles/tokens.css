@@ -19,18 +19,18 @@
   --gold: #c89c62; /* desert gold: hairlines, the threshold frame, the scroll cue. Never a fill. */
   --gold-dim: rgba(200, 156, 98, 0.55);
 
-  /* The one light ground: warm sand paper for Chapter VI, charcoal type on it */
+  /* The one light ground: warm sand paper for Book a Visit, charcoal type on it */
   --sand: #e8dfd0;
   --sand-deep: #d9cdb9;
   --umber-fog: rgba(20, 19, 17, 0.66); /* secondary type on sand, 5.3:1 */
 
-  /* Fonts */
-  --font-display: "Gambetta", "Iowan Old Style", "Palatino Linotype", Georgia, serif;
-  --font-body: "Switzer", system-ui, -apple-system, "Segoe UI", sans-serif;
+  /* The one font family, for every piece of text on the site. Declared once, on body; everything inherits it.
+     Hierarchy comes from size, weight, italics and letter spacing, never from a second family. */
+  --font: "Gambetta", "Iowan Old Style", "Palatino Linotype", Georgia, serif;
 
   /* Scale */
-  --text-caption: 0.875rem;
-  --text-body: 1.125rem;
+  --text-caption: 0.9375rem;
+  --text-body: 1.1875rem;
   --text-lede: clamp(1.25rem, 1.05rem + 0.9vw, 1.75rem);
   --text-h1: clamp(3rem, 1.6rem + 7.2vw, 9.5rem);
   --text-h2: clamp(2.5rem, 1.4rem + 5vw, 6.5rem);
@@ -52,7 +52,7 @@
 
 @media (max-width: 767px) {
   :root {
-    --text-body: 1.0625rem;
+    --text-body: 1.125rem;
     --bar: 44px;
     --header-h: 68px;
   }

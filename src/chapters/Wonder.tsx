@@ -11,7 +11,7 @@ type Props = { moments: [Moment, Moment, Moment, Moment, Moment] };
 const FILL = { aspectRatio: "auto", width: "100%", height: "100%" } as const;
 
 /**
- * Chapter V: Moments of Wonder.
+ * Moments of Wonder.
  *
  * Four full-bleed moments in the same film language as the rest of the site:
  * a wide frame, a diptych (a detail beside an animal), a second wide frame, and a closing frame that

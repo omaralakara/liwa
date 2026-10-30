@@ -9,12 +9,12 @@ type Props = { image: ImageId; mobile?: ImageId };
 const FILL = { aspectRatio: "auto", width: "100%", height: "100%" } as const;
 
 /**
- * Chapter III: Into the Wild.
+ * Into the Wild.
  *
  * Opens as a dark widescreen band held tight on the oryx. The band expands to the
  * full frame while the camera pulls back, so the animal becomes small in a vast
  * plain: the scale and silence of the place is the moment. Headline lines rise
- * through masks with the pull-back, then leave as the scene dims toward Chapter IV.
+ * through masks with the pull-back, then leave as the scene dims toward The Land.
  */
 export function Wild({ image, mobile }: Props) {
   const root = useRef<HTMLElement>(null);
@@ -125,9 +125,9 @@ export function Wild({ image, mobile }: Props) {
           set the pace.
         </h2>
         <p className="scene__body wild__body">
-          Safari in Namibia keeps no schedule. You go out early, you wait, and when something steps into the light
-          you remember why you came. Desert-adapted elephant, oryx, giraffe and lion inland; seals and flamingos on
-          the coast. This is the safari LIWA is built around: as much about space and light as about the animals.
+          A LIWA safari follows the animals&rsquo; day, not ours. You go out early, keep your distance and wait. Namibia
+          is home to desert-adapted elephant, oryx, giraffe and lion inland, with seals and flamingos on the coast.
+          Seeing them on their own terms is the point.
         </p>
       </div>
 

@@ -13,7 +13,7 @@ export const cast: Record<"awakening" | "wild" | "land" | "vision", Role> & {
   wonder: [
     { id: "wonder-elephants", caption: "A family on the move, early, before the heat.", position: "50% 62%" },
     { id: "wonder-ripples", caption: "What the wind did overnight.", position: "50% 50%" },
-    { id: "wonder-lion", caption: "He walked past without looking at us once.", position: "42% 50%" },
+    { id: "wonder-lion", caption: "He walks past without a glance.", position: "42% 50%" },
     { id: "wild-zebra", caption: "A mare and her foal, lit from the side at the end of the day.", position: "55% 50%" },
     { id: "wonder-ostriches", caption: "Two ostriches, and the dust the wind brought in.", position: "50% 55%" },
   ],

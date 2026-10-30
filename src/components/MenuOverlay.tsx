@@ -1,15 +1,18 @@
 import { useEffect, useRef, type RefObject } from "react";
 import { gsap, useGSAP } from "../lib/gsap";
 import { lockScroll } from "../lib/smooth";
-import { chapters, primaryNav, secondaryNav, site, type ChapterId } from "../data/site";
+import { hrefFor, isInPage, primaryNav, secondaryNav, site, type ChapterId, type NavId, type Page } from "../data/site";
 import { SoundToggle } from "./SoundToggle";
 
 type Props = {
   open: boolean;
+  page: Page;
+  /** The primary path the visitor is on: its bullet is filled. */
+  current: NavId | null;
   /** The hamburger in the header: its two bars are choreographed with the panel, and focus returns to it. */
   toggleRef: RefObject<HTMLButtonElement | null>;
   onClose: () => void;
-  /** Close, then travel to the chapter (the caller releases the scroll lock before measuring). */
+  /** Close, then travel to a chapter of this page (the caller releases the scroll lock before measuring). */
   onSelect: (id: ChapterId) => void;
 };
 
@@ -18,17 +21,13 @@ const FOCUSABLE = 'a[href], button:not([disabled]), [tabindex]:not([tabindex="-1
 /** The secondary chapter list, less Book a Visit: it already has its own line under the primary paths. */
 const chapterPaths = secondaryNav.filter((c) => c.id !== "visit");
 
-function numberOf(id: ChapterId) {
-  return chapters.find((c) => c.id === id)?.number ?? "";
-}
-
 /**
- * The full-screen menu: a burgundy veil leads a charcoal curtain down the viewport, the five
- * primary paths rise through line masks, then "Book a visit", the remaining chapters, the
- * contact and a gold hairline follow. One paused timeline is played or reversed, so rapid taps are always safe.
+ * The full-screen menu: a burgundy veil leads a charcoal curtain down the viewport, the seven
+ * primary paths rise through line masks beside their bullets, then "Book a visit", the remaining
+ * chapters, the contact and a gold hairline follow. One paused timeline is played or reversed, so rapid taps are always safe.
  * The panel is rendered inside the fixed header, never inside a pinned chapter.
  */
-export function MenuOverlay({ open, toggleRef, onClose, onSelect }: Props) {
+export function MenuOverlay({ open, page, current, toggleRef, onClose, onSelect }: Props) {
   const root = useRef<HTMLDivElement>(null);
   const tl = useRef<gsap.core.Timeline | null>(null);
   const wasOpen = useRef(false);
@@ -71,7 +70,7 @@ export function MenuOverlay({ open, toggleRef, onClose, onSelect }: Props) {
             .fromTo(headerRest, { autoAlpha: 1 }, { autoAlpha: 0, duration: 0.3, ease: "power2.out", immediateRender: false }, 0)
             // Primary paths rise through line masks.
             .fromTo(q(".menu__primary-inner"), { yPercent: 110 }, { yPercent: 0, duration: 0.7, stagger: 0.06 }, 0.3)
-            .fromTo(q(".menu__primary-num"), { autoAlpha: 0 }, { autoAlpha: 1, duration: 0.5, stagger: 0.06, ease: "power2.out" }, 0.42)
+            .fromTo(q(".menu__primary-dot"), { autoAlpha: 0, scale: 0 }, { autoAlpha: 1, scale: 1, duration: 0.5, stagger: 0.06, ease: "power2.out" }, 0.42)
             // Then the quieter material.
             .fromTo(
               q(".menu__meta, .menu__sound, .menu__book, .menu__secondary, .menu__contact"),
@@ -145,10 +144,15 @@ export function MenuOverlay({ open, toggleRef, onClose, onSelect }: Props) {
     return () => document.removeEventListener("keydown", onKey);
   }, [open, onClose, toggleRef]);
 
-  const select = (id: ChapterId) => (e: React.MouseEvent<HTMLAnchorElement>) => {
+  const select = (id: NavId) => (e: React.MouseEvent<HTMLAnchorElement>) => {
     if (e.metaKey || e.ctrlKey) return;
+    // Another page: close and let the browser follow the link.
+    if (!isInPage(id, page)) {
+      onClose();
+      return;
+    }
     e.preventDefault();
-    onSelect(id);
+    onSelect(id as ChapterId);
   };
 
   return (
@@ -183,10 +187,8 @@ export function MenuOverlay({ open, toggleRef, onClose, onSelect }: Props) {
             <ul>
               {primaryNav.map((p) => (
                 <li key={p.id}>
-                  <a href={`#${p.id}`} onClick={select(p.id)}>
-                    <span className="menu__primary-num caption" aria-hidden="true">
-                      {numberOf(p.id)}
-                    </span>
+                  <a href={hrefFor(p.id, page)} onClick={select(p.id)} aria-current={current === p.id ? (p.id === "packages" ? "page" : "true") : undefined}>
+                    <span className="menu__primary-dot" aria-hidden="true" />
                     <span className="menu__primary-mask">
                       <span className="menu__primary-inner display">{p.label}</span>
                     </span>
@@ -197,7 +199,7 @@ export function MenuOverlay({ open, toggleRef, onClose, onSelect }: Props) {
           </nav>
           <p className="menu__book">
             <span className="menu__book-rule" aria-hidden="true" />
-            <a href="#visit" className="menu__book-link" onClick={select("visit")}>
+            <a href={hrefFor("visit", page)} className="menu__book-link" onClick={select("visit")}>
               Book a visit
             </a>
           </p>
@@ -205,12 +207,12 @@ export function MenuOverlay({ open, toggleRef, onClose, onSelect }: Props) {
 
         <div className="menu__foot">
           <span className="menu__rule" aria-hidden="true" />
-          <nav className="menu__secondary" aria-label="Chapters">
+          <nav className="menu__secondary" aria-label="More of the story">
             <ul>
               {chapterPaths.map((c) => (
                 <li key={c.id}>
-                  <a href={`#${c.id}`} className="caption" onClick={select(c.id)} aria-label={`Chapter ${c.number}, ${c.title}`}>
-                    <span aria-hidden="true">{c.number}</span>
+                  <a href={hrefFor(c.id, page)} className="caption" onClick={select(c.id)}>
+                    <span className="menu__secondary-dot" aria-hidden="true" />
                     {c.title}
                   </a>
                 </li>

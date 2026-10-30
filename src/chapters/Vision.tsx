@@ -9,13 +9,13 @@ type Props = { image: ImageId; mobile?: ImageId };
 const FILL = { aspectRatio: "auto", width: "100%", height: "100%" } as const;
 
 /**
- * Chapter VI: A New Vision.
+ * The Resort (the arch chapter, once called A New Vision).
  *
  * The signature transition. Out of the dark, a tall doorway with a rounded
  * architectural arch opens onto the lamp-lit pavilion; the arch widens until the
- * vision fills the frame while the camera drifts closer and the lamplight warms.
- * The photography is illustrative of the proposed experience; the one disclosure
- * for all illustrative imagery lives in the closing chapter.
+ * picture fills the frame while the camera drifts closer and the lamplight warms.
+ * The resort is planned, not built, and the copy says so. The photography is illustrative;
+ * the disclosure for all illustrative imagery lives in the footer.
  */
 export function Vision({ image, mobile }: Props) {
   const root = useRef<HTMLElement>(null);
@@ -116,7 +116,7 @@ export function Vision({ image, mobile }: Props) {
   );
 
   return (
-    <section id="vision" ref={root} className="scene vision" aria-labelledby="vision-title">
+    <section id="resort" ref={root} className="scene vision" aria-labelledby="vision-title">
       <div className="scene__stage">
         <div className="scene__ghost" aria-hidden="true">
           <Picture id={image} mobile={mobile} sizes="100vw" position="50% 82%" style={FILL} />
@@ -133,8 +133,8 @@ export function Vision({ image, mobile }: Props) {
       <div className="scene__scrim scene__scrim--centre" aria-hidden="true" />
 
       <p className="scene__eyebrow vision__eyebrow caption">
-        <span>A New Vision</span>
-        <span>The resort, as we imagine it</span>
+        <span>The Resort</span>
+        <span>Comfort, after a day in the wild</span>
       </p>
 
       <div className="scene__text scene__text--centre vision__text">
@@ -144,8 +144,8 @@ export function Vision({ image, mobile }: Props) {
           come back to.
         </h2>
         <p className="lede vision__lede">
-          The resort LIWA intends to build: a house in the Namibian wilderness, run with the kind of welcome you find
-          in the Gulf, where a guest is looked after before they think to ask.
+          LIWA is planning a resort in Namibia for the hours after the safari. Guests will be looked after before they
+          think to ask, and the land around them will be treated with the same care.
         </p>
       </div>
 

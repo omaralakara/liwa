@@ -1,0 +1,627 @@
+/* ---------- Packages & Experiences ----------
+   A second page of the same film. The Land's composition opens it: a monumental plate, the headline
+   across its lower edge, then a gold rule, a lede and a note on the twelve columns. Three editorial
+   rows follow, each a large plate bleeding off one edge with the words offset beside it. The page
+   closes on the homepage's light valley, with the request form. Nothing is pinned.
+   Reveal windows (clip-path) live on unscaled wrappers; the settle happens on the media inside. */
+
+/* ---------- The opening ---------- */
+
+.packages-hero,
+.packages-hero__body {
+  --hero-type: clamp(3.4rem, 1.6rem + 7.6vw, 10rem);
+  --hero-overlap: calc(0.86 * var(--hero-type));
+}
+
+/* The page's first section. Holding the figure's negative margin, it ends where the headline begins,
+   so the header (which watches this section) turns solid just as the headline reaches the bar. */
+.packages-hero {
+  position: relative;
+  display: flow-root;
+  background: var(--charcoal);
+  color: var(--ivory);
+}
+
+.packages-hero__figure {
+  position: relative;
+  height: clamp(420px, 74vh, 900px);
+  margin: 0 0 calc(-1 * var(--hero-overlap));
+  overflow: hidden;
+  background: var(--charcoal);
+}
+
+.packages-hero__window {
+  position: absolute;
+  inset: 0;
+  will-change: clip-path;
+}
+
+.packages-hero__media {
+  position: absolute;
+  inset: 0;
+  transform-origin: 50% 60%;
+  will-change: transform;
+}
+
+.packages-hero__media .picture {
+  position: absolute;
+  inset: 0;
+}
+
+.packages-hero__media img {
+  object-position: 50% 42%;
+}
+
+/* Darkening along the foot so the overlapping headline reads over the animals' legs, and a warm, deeper head: a pale sky under the bar */
+.packages-hero__grade {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    linear-gradient(to top, rgba(20, 19, 17, 0.94) 0%, rgba(20, 19, 17, 0.62) 16%, rgba(20, 19, 17, 0.26) 30%, transparent 48%),
+    linear-gradient(to bottom, rgba(30, 19, 14, 0.78) 0%, rgba(30, 19, 14, 0.5) 12%, rgba(30, 19, 14, 0.14) 24%, transparent 34%);
+}
+
+/* Over the photograph: it paints above the figure, so it keeps no ground of its own */
+.packages-hero__body {
+  position: relative;
+  padding-bottom: clamp(96px, 14vh, 180px);
+  color: var(--ivory);
+}
+
+.packages-hero__eyebrow {
+  z-index: 2;
+}
+
+.packages-hero__eyebrow span {
+  color: var(--ivory);
+}
+
+/* The headline sits across the photograph's lower edge */
+.packages-hero__headline {
+  position: relative;
+  z-index: 2;
+  font-size: var(--hero-type);
+  line-height: 0.92;
+}
+
+.packages-hero__columns {
+  position: relative;
+  margin-top: clamp(40px, 6vh, 88px);
+  row-gap: 28px;
+}
+
+.packages-hero__rule {
+  grid-column: 1 / span 2;
+  display: block;
+  height: 1px;
+  margin-top: 0.9em;
+  background: var(--gold-dim);
+  transform-origin: left center;
+}
+
+.packages-hero__lede {
+  grid-column: 4 / span 5;
+  max-width: 30rem;
+  color: rgba(237, 230, 218, 0.9);
+}
+
+.packages-hero__note {
+  grid-column: 9 / span 4;
+  color: var(--fog);
+}
+
+/* ---------- The packages: alternating editorial rows ---------- */
+
+.packages-list {
+  position: relative;
+  overflow: clip; /* the bleeding plates and their settle never widen the page */
+  padding-bottom: clamp(120px, 20vh, 240px);
+  background: var(--charcoal);
+  color: var(--ivory);
+}
+
+/* The heading rests its lower half on the first plate, the way the headline above rests on the first photograph */
+.packages-list__head {
+  position: relative;
+  z-index: 3;
+  margin-bottom: calc(-0.42 * var(--text-h2));
+}
+
+.packages-list__title {
+  grid-column: 4 / -1;
+}
+
+.package {
+  --title-size: clamp(2.75rem, 1.4rem + 4.6vw, 6.5rem);
+  position: relative;
+  align-items: start;
+}
+
+.package + .package {
+  margin-top: clamp(112px, 20vh, 240px);
+}
+
+.package__figure {
+  position: relative;
+  grid-row: 1;
+  height: clamp(420px, min(80vh, 60vw), 1100px);
+  margin: 0;
+  overflow: hidden;
+}
+
+.package--left .package__figure {
+  grid-column: 1 / span 7;
+  margin-left: calc(-1 * var(--gutter));
+}
+
+.package--right .package__figure {
+  grid-column: 6 / -1;
+  margin-right: calc(-1 * var(--gutter));
+}
+
+.package__window {
+  position: absolute;
+  inset: 0;
+  will-change: clip-path;
+}
+
+.package__media {
+  position: absolute;
+  inset: 0;
+  transform-origin: 50% 60%;
+  will-change: transform;
+}
+
+.package__media .picture {
+  position: absolute;
+  inset: 0;
+}
+
+/* The plate settles into the ground along its inner edge, so the title can cross it */
+.package__edge {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.package--left .package__edge {
+  background: linear-gradient(to left, rgba(20, 19, 17, 0.62) 0%, rgba(20, 19, 17, 0.26) 11%, transparent 24%);
+}
+
+.package--right .package__edge {
+  background: linear-gradient(to right, rgba(20, 19, 17, 0.62) 0%, rgba(20, 19, 17, 0.26) 11%, transparent 24%);
+}
+
+/* The words: a grid of their own, on the page's columns, so the title can start one column ahead of the text */
+.package__words {
+  position: relative;
+  z-index: 2;
+  grid-row: 1;
+  display: grid;
+  column-gap: clamp(12px, 1.5vw, 24px);
+  min-width: 0;
+}
+
+.package--left .package__words {
+  grid-column: 7 / -1;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  align-self: end;
+  margin-bottom: calc(-1 * clamp(32px, 8vh, 96px));
+}
+
+.package--left .package__text {
+  grid-column: 3 / -1;
+}
+
+.package--right .package__words {
+  grid-column: 1 / span 7;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  padding-top: clamp(32px, 10vh, 120px);
+}
+
+.package--right .package__title {
+  grid-column: 3 / -1;
+}
+
+.package--right .package__text {
+  grid-column: 1 / span 4;
+}
+
+.package__title {
+  grid-column: 1 / -1;
+  font-size: var(--title-size);
+  line-height: 0.98;
+}
+
+.package__text {
+  min-width: 0;
+  max-width: 32rem;
+  margin-top: clamp(20px, 3.4vh, 40px);
+}
+
+.package__summary {
+  font-size: clamp(1.1875rem, 1rem + 0.55vw, 1.5rem);
+  color: rgba(237, 230, 218, 0.92);
+}
+
+.package__rule {
+  display: block;
+  height: 1px;
+  margin-top: clamp(20px, 3vh, 32px);
+  background: var(--gold-dim);
+  transform-origin: left center;
+}
+
+.package__pending {
+  margin-top: clamp(14px, 2vh, 20px);
+  text-wrap: pretty;
+}
+
+/* An aside, so italic. The bullet is the same hollow ring as the menu's at rest */
+.package__status {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 10px;
+  font-style: italic;
+  color: var(--fog);
+}
+
+.package__rule + .package__status {
+  margin-top: clamp(14px, 2vh, 20px);
+}
+
+.package__ring {
+  display: block;
+  flex: none;
+  width: 8px;
+  height: 8px;
+  border: 1px solid var(--gold-dim);
+  border-radius: 50%;
+}
+
+/* Every confirmed field under its own gold hairline */
+.package__detail {
+  display: grid;
+  grid-template-columns: 9.5rem minmax(0, 1fr);
+  column-gap: 16px;
+  padding: 12px 0;
+  border-top: 1px solid var(--gold-dim);
+}
+
+.package__detail:first-child {
+  border-top: 0;
+}
+
+.package__label {
+  padding-top: 0.2em;
+}
+
+.package__value {
+  font-size: 1.125rem;
+  line-height: 1.4;
+  color: var(--ivory);
+}
+
+.package__list {
+  list-style: none;
+}
+
+.package__details + .package__pending {
+  margin-top: 0;
+  padding-top: clamp(14px, 2vh, 20px);
+  border-top: 1px solid var(--gold-dim);
+}
+
+/* The action: a text link on a resting hairline; gold draws over it under the pointer */
+.package__action {
+  position: relative;
+  display: inline-block;
+  min-height: 44px;
+  margin-top: clamp(22px, 3.4vh, 36px);
+  padding: 8px 0 10px;
+  font-weight: 300;
+  font-size: clamp(1.3125rem, 0.95rem + 1vw, 1.75rem);
+  line-height: 1.2;
+  color: var(--ivory);
+  transition: color var(--t-fast) var(--ease-out);
+}
+
+.package__action::before,
+.package__action::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 1px;
+  background: var(--gold-dim);
+}
+
+.package__action::after {
+  background: var(--gold);
+  transform: scaleX(0);
+  transform-origin: right;
+  transition: transform 520ms var(--ease-out);
+}
+
+.package__action:hover,
+.package__action:focus-visible {
+  color: var(--gold);
+}
+
+.package__action:hover::after,
+.package__action:focus-visible::after {
+  transform: scaleX(1);
+  transform-origin: left;
+}
+
+/* The internal sample's stand-in for an action: visibly not one */
+.package__action-note {
+  display: inline-block;
+  margin-top: clamp(22px, 3.4vh, 36px);
+  padding-bottom: 8px;
+  border-bottom: 1px dashed rgba(169, 176, 179, 0.4);
+  color: var(--fog);
+}
+
+/* The internal preview's banner: impossible to take for part of the page */
+.packages-preview {
+  margin-top: clamp(112px, 20vh, 240px);
+}
+
+.packages-preview__banner {
+  margin-bottom: clamp(48px, 9vh, 112px);
+  padding: 16px var(--gutter);
+  background: var(--claret);
+  color: var(--ivory);
+  font-size: 1.125rem;
+  line-height: 1.35;
+}
+
+/* ---------- The enquiry: sand paper, charcoal type ---------- */
+
+.packages-enquire {
+  position: relative;
+  background: var(--sand);
+  color: var(--charcoal);
+}
+
+.packages-enquire ::selection {
+  background: var(--claret);
+  color: var(--ivory);
+}
+
+/* At least one screen, so the glide here can always bring the section to the top of the view */
+.packages-enquire__inner {
+  align-items: start;
+  align-content: center;
+  row-gap: 56px;
+  min-height: 100vh;
+  min-height: 100svh;
+  padding-top: calc(var(--header-h) + clamp(32px, 8vh, 96px));
+  padding-bottom: clamp(88px, 14vh, 168px);
+}
+
+.packages-enquire__words {
+  grid-column: 1 / span 5;
+}
+
+.packages-enquire__eyebrow {
+  position: static;
+  flex-wrap: wrap;
+  column-gap: 14px;
+  row-gap: 0;
+  color: var(--umber-fog);
+}
+
+.packages-enquire__eyebrow span:first-child {
+  color: var(--charcoal);
+}
+
+.packages-enquire__headline {
+  margin-top: clamp(16px, 3vh, 32px);
+}
+
+.packages-enquire__rule {
+  display: block;
+  width: clamp(56px, 8vw, 120px);
+  height: 1px;
+  margin-top: clamp(24px, 4vh, 44px);
+  background: var(--gold-dim);
+  transform-origin: left center;
+}
+
+.packages-enquire__lede {
+  margin-top: clamp(20px, 3vh, 32px);
+  color: rgba(20, 19, 17, 0.9);
+}
+
+.packages-enquire .visit__alt {
+  margin-top: clamp(10px, 1.6vh, 16px);
+  font-size: 0.9375rem;
+}
+
+.packages-enquire__form {
+  grid-column: 7 / -1;
+  padding-top: clamp(24px, 6vh, 72px);
+}
+
+/* The homepage's form must fit one screen; this one has the room to breathe */
+.packages-enquire .visit__form {
+  margin-top: 0;
+}
+
+.packages-enquire .visit__fields {
+  row-gap: clamp(16px, 2.6vh, 28px);
+}
+
+.packages-enquire .visit__textarea {
+  min-height: 5.5em;
+}
+
+/* Fuller contrast on the quietest words: nothing here has to fit, or to step back */
+.packages-enquire .visit__optional {
+  opacity: 1;
+}
+
+.packages-enquire .visit__input::placeholder {
+  opacity: 0.9;
+}
+
+.packages-enquire .visit__submit-row {
+  margin-top: clamp(24px, 3.4vh, 36px);
+}
+
+.packages-enquire .visit__note {
+  font-size: 0.9375rem;
+}
+
+/* ---------- Smaller laptops and tablets: a wider column for the words ---------- */
+
+@media (max-width: 1199px) {
+  .package--left .package__text {
+    grid-column: 2 / -1;
+  }
+  .package--right .package__text {
+    grid-column: 1 / span 5;
+    padding-right: clamp(12px, 2vw, 24px);
+  }
+}
+
+@media (max-width: 1023px) {
+  .packages-hero__lede,
+  .packages-hero__note {
+    grid-column: 3 / span 8;
+  }
+  /* Upright screens: the plates grow taller, not wider */
+  .package__figure {
+    height: clamp(420px, min(72vh, 76vw), 900px);
+  }
+  .packages-enquire__form {
+    grid-column: 6 / -1;
+    padding-top: 0;
+  }
+}
+
+/* ---------- Phones: the photograph nearly full width, the words below it ---------- */
+
+@media (max-width: 767px) {
+  .packages-hero,
+  .packages-hero__body {
+    --hero-type: clamp(2.4rem, 10.6vw, 4.6rem);
+    --hero-overlap: calc(0.78 * var(--hero-type));
+  }
+  .packages-hero__body {
+    padding-bottom: 88px;
+  }
+  .packages-hero__figure {
+    height: min(78svh, 640px);
+  }
+  /* No portrait crop of this one: the upright frame keeps the mare whole, and what it can of the foal */
+  .packages-hero__media img {
+    object-position: 67% 50%;
+  }
+  .packages-hero__eyebrow {
+    flex-direction: column;
+    gap: 2px;
+  }
+  .packages-hero__columns {
+    display: block;
+    margin-top: 32px;
+  }
+  .packages-hero__rule {
+    width: 56px;
+    margin: 0 0 24px;
+  }
+  .packages-hero__note {
+    margin-top: 20px;
+  }
+
+  .packages-list {
+    padding-bottom: 104px;
+  }
+  .packages-list__title {
+    grid-column: 1 / -1;
+  }
+
+  .package {
+    --title-size: clamp(2.75rem, 1rem + 9vw, 4rem);
+    display: block;
+  }
+  .package + .package {
+    margin-top: 88px;
+  }
+  /* Four by five, and never taller than a landscape phone can show */
+  .package__figure {
+    height: min(120vw, 88svh);
+    min-height: 320px;
+  }
+  .package--left .package__figure {
+    margin-right: 0;
+  }
+  .package--right .package__figure {
+    margin-left: 0;
+  }
+  /* The title takes up the homepage's move: half on the photograph, half on the ground */
+  .package--left .package__edge,
+  .package--right .package__edge {
+    background: linear-gradient(to top, rgba(20, 19, 17, 0.74) 0%, rgba(20, 19, 17, 0.3) 14%, transparent 30%);
+  }
+  .package--left .package__words,
+  .package--right .package__words {
+    display: block;
+    margin-top: calc(-0.62 * var(--title-size));
+    margin-bottom: 0;
+    padding-top: 0;
+  }
+  .package__title {
+    line-height: 1;
+  }
+  .package--right .package__title {
+    text-align: right;
+  }
+  .package__text {
+    max-width: none;
+    margin-top: 20px;
+  }
+  .package--right .package__text {
+    padding-right: 0;
+  }
+  .package__detail {
+    grid-template-columns: 7.5rem minmax(0, 1fr);
+  }
+
+  .packages-preview {
+    margin-top: 88px;
+  }
+  .packages-preview__banner {
+    margin-bottom: 40px;
+    font-size: 1.0625rem;
+  }
+
+  .packages-enquire__words,
+  .packages-enquire__form {
+    grid-column: 1 / -1;
+  }
+  .packages-enquire__inner {
+    row-gap: 36px;
+  }
+  .packages-enquire .visit__note,
+  .packages-enquire .visit__alt {
+    font-size: 0.875rem;
+    line-height: 1.35;
+  }
+  .packages-enquire .visit__chip span {
+    padding-inline: 14px;
+    font-size: 0.9375rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .package__action,
+  .package__action::after {
+    transition: none;
+  }
+}

@@ -29,8 +29,9 @@
 }
 
 .sound-toggle__label {
-  color: var(--fog);
-  letter-spacing: 0.02em;
+  color: rgba(237, 230, 218, 0.8);
+  letter-spacing: 0.01em;
+  white-space: nowrap;
   transition: color var(--t-fast) var(--ease-out);
 }
 
@@ -95,7 +96,7 @@
 }
 
 .sound-toggle--header .sound-toggle__label {
-  font-size: 0.8125rem;
+  font-size: 0.9375rem;
 }
 
 @media (max-width: 959px) {

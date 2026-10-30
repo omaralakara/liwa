@@ -2,19 +2,20 @@ import { useEffect, useRef, useState } from "react";
 import { gsap, SplitText, useGSAP } from "../lib/gsap";
 import { insetClip } from "../lib/clip";
 import { Picture } from "../components/Picture";
+import { SiteFooter } from "../components/SiteFooter";
 import { site } from "../data/site";
 import { scrollToId } from "../lib/smooth";
 
 const FILL = { aspectRatio: "auto", width: "100%", height: "100%" } as const;
 
 /**
- * Chapter IX: Contact Us.
+ * Contact Us.
  *
  * The practical close, and the site footer. A slim band of the dune sea from above
  * opens the chapter so even the practical page begins with the desert, then type
  * does the work: a short headline, a welcoming lede, and the two ways to reach
  * LIWA set large in Gambetta, each a working link under a gold hairline, and a third row
- * that leads back to the visit request in Chapter VII. No form here.
+ * that leads back to the visit request. No form here.
  * One timeline on arrival; nothing pinned; links are never hidden with visibility
  * so they stay in the tab order.
  */
@@ -84,7 +85,7 @@ export function Contact() {
                   { opacity: 1, y: 0, duration: 1.2, stagger: 0.14 },
                   1.55,
                 )
-                .fromTo(q(".contact__footer"), { autoAlpha: 0 }, { autoAlpha: 1, duration: 1.2 }, 2.3);
+                .fromTo(q(".site-footer"), { opacity: 0 }, { opacity: 1, duration: 1.2 }, 2.3);
               return tl;
             },
           });
@@ -121,7 +122,7 @@ export function Contact() {
               or call.
             </h2>
             <p className="contact__lede lede">
-              Ask us about the safari, or about the resort vision. Press and partners, write too.
+              Ask us about the safari or the resort. Press and partners, write too.
             </p>
           </div>
 
@@ -162,15 +163,7 @@ export function Contact() {
         </div>
       </div>
 
-      <footer className="contact__footer caption">
-        <p className="contact__colophon">
-          <span>{site.fullName}</span>
-          <span>{site.descriptor}</span>
-        </p>
-        <p className="contact__disclosure" data-disclosure>
-          {site.disclosure}
-        </p>
-      </footer>
+      <SiteFooter />
     </section>
   );
 }

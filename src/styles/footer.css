@@ -1,0 +1,64 @@
+/* ---------- Site footer: the same on both pages ---------- */
+
+.site-footer {
+  position: relative;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: end;
+  gap: 8px 32px;
+  padding: 20px var(--gutter) 28px;
+  border-top: 1px solid rgba(169, 176, 179, 0.14);
+  color: var(--fog-dim);
+}
+
+.site-footer__colophon {
+  display: flex;
+  gap: 20px;
+  margin: 0;
+}
+
+.site-footer__colophon span:first-child {
+  color: var(--fog);
+}
+
+.site-footer__disclosure,
+.site-footer__credit {
+  margin: 0;
+}
+
+/* The credit stays quiet: a thin underline says it is a link, gold and ivory say it is under the pointer. */
+.site-footer__credit-link {
+  color: var(--fog);
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-decoration-color: rgba(169, 176, 179, 0.4);
+  text-underline-offset: 0.22em;
+  transition:
+    color var(--t-fast) var(--ease-out),
+    text-decoration-color var(--t-fast) var(--ease-out);
+}
+
+.site-footer__credit-link:hover,
+.site-footer__credit-link:focus-visible {
+  color: var(--ivory);
+  text-decoration-color: var(--gold);
+}
+
+@media (max-width: 767px) {
+  .site-footer {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+  .site-footer__colophon {
+    flex-direction: column;
+    gap: 2px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .site-footer__credit-link {
+    transition: none;
+  }
+}

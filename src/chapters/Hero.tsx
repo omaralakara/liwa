@@ -9,7 +9,7 @@ type Props = { image: ImageId; mobile?: ImageId; dawn: ImageId };
 const FILL = { aspectRatio: "auto", width: "100%", height: "100%" } as const;
 
 /**
- * Chapter I as the opening of a film.
+ * The Awakening, as the opening of a film.
  *
  * Entrance: a dark veil lifts, warm light blooms on the crest, the landscape settles,
  * the brand rises and the headline is revealed line by line through masks.
@@ -17,7 +17,7 @@ const FILL = { aspectRatio: "auto", width: "100%", height: "100%" } as const;
  * Scroll (pinned): the camera pushes in and the words leave; then a window in the
  * logo's own rounded-frame geometry opens onto the same landscape in full morning
  * light (a pre-graded second exposure, no runtime filters), until the sun fills the
- * frame; finally the scene dims and Chapter II follows. Fully reversible.
+ * frame; finally the scene dims and About LIWA follows. Fully reversible.
  */
 export function Hero({ image, mobile, dawn }: Props) {
   const root = useRef<HTMLElement>(null);
@@ -76,6 +76,8 @@ export function Hero({ image, mobile, dawn }: Props) {
             .from(q(".hero__eyebrow"), { y: 10, autoAlpha: 0, duration: 1.1 }, 1.1)
             .from(q(".hero__lede"), { y: 16, autoAlpha: 0, duration: 1.2 }, 1.9)
             .from(q(".hero__cue"), { scaleY: 0, transformOrigin: "top center", duration: 1.1, ease: "power2.inOut" }, 2.2);
+          // Opened on a later chapter's address: the header must not wait for a title sequence nobody sees.
+          if (window.location.hash && window.location.hash !== "#awakening") intro.progress(1);
 
           return () => {
             settle = undefined;
@@ -147,7 +149,7 @@ export function Hero({ image, mobile, dawn }: Props) {
             .to(frameEl, { autoAlpha: 0, duration: 0.08 }, 0.86)
             .fromTo(q(".hero__caption"), { autoAlpha: 0, y: 12 }, { autoAlpha: 1, y: 0, duration: 0.12 }, 0.46)
             .to(q(".hero__caption"), { autoAlpha: 0, duration: 0.1 }, 0.8)
-            // the cut to Chapter II
+            // the cut to About LIWA
             .to(q(".hero__shade"), { autoAlpha: 0.55, duration: 0.16 }, 0.84)
             .fromTo(q(".hero__stage"), { scale: 1.14 }, { scale: 1.08, duration: 0.16, ease: "power1.in", immediateRender: false }, 0.84);
         },
@@ -183,10 +185,10 @@ export function Hero({ image, mobile, dawn }: Props) {
         <h1 id="hero-title" className="hero__headline display">
           Before the light,{" "}
           <br />
-          the desert is already awake.
+          the wild is already awake.
         </h1>
         <p className="hero__lede">
-          A luxury safari in Namibia, and the vision for a resort in the oldest desert on earth.
+          A luxury safari and resort brand for Namibia, built on respect for the wild.
         </p>
       </div>
 

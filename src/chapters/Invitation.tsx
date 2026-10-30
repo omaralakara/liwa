@@ -2,14 +2,13 @@ import { useRef } from "react";
 import { gsap, SplitText, useGSAP } from "../lib/gsap";
 import { insetClip } from "../lib/clip";
 import { Mark } from "../components/Mark";
-import { site } from "../data/site";
 
 /**
- * Chapter VIII: The Invitation.
+ * The Invitation.
  *
  * The emotional close. A low ember of light breathes behind the mark; the mark is
  * revealed through a mask, the closing line rises through line masks, and one host
- * line hands over to the practical chapter that follows (IX, Contact Us). Played
+ * line hands over to the practical chapter that follows (Contact Us). Played
  * once on arrival and reversed on leaving, not scrubbed.
  */
 export function Invitation() {
@@ -68,10 +67,10 @@ export function Invitation() {
       <div className="invitation__centre">
         <Mark className="invitation__mark" />
         <h2 id="invitation-title" className="display display--h3 display--italic invitation__headline">
-          Until we meet in the desert.
+          Until we meet in the wild.
         </h2>
         <p className="body invitation__host">
-          {site.fullName}. A luxury safari in Namibia, and a resort to come. When you are ready, write to us.
+          Experience the wilderness. Respect its legacy. When you are ready, write to us.
         </p>
       </div>
     </section>

@@ -9,7 +9,7 @@ type Props = { image: ImageId; mobile?: ImageId; position?: string };
 const FILL = { aspectRatio: "auto", width: "100%", height: "100%" } as const;
 
 /**
- * Chapter IV: The Land.
+ * The Land.
  *
  * The first deliberate stillness. One monumental panorama, revealed once by a slow
  * wipe as the chapter arrives, and a headline that sits half on the photograph and
@@ -92,7 +92,7 @@ export function Land({ image, mobile, position }: Props) {
           </p>
           <p className="land__note body">
             Namibia has more sky than people. From the dunes of Sossusvlei to the Skeleton Coast and the plains of
-            Etosha, it is one of the great safari countries of Africa. This is LIWA&rsquo;s country.
+            Etosha, it is one of Africa&rsquo;s great wild places. We think it should stay that way.
           </p>
         </div>
       </div>

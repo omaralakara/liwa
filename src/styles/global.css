@@ -22,7 +22,8 @@ html {
   *,
   *::before,
   *::after {
-    transition-duration: 0.01ms !important;
+    /* none, not a tiny duration: that transitions `all`, and visibility then descends one level per frame, too late for focus. */
+    transition: none !important;
     animation-duration: 0.01ms !important;
   }
 }
@@ -35,8 +36,8 @@ body {
 body {
   background: var(--umber);
   color: var(--bone);
-  font-family: var(--font-body);
-  font-weight: 300;
+  font-family: var(--font);
+  font-weight: 400;
   font-size: var(--text-body);
   line-height: 1.6;
   overflow-x: hidden;
@@ -59,6 +60,20 @@ a {
   text-decoration: none;
 }
 
+/* Form controls do not inherit the page's font by default; here they do, so there is one family everywhere. */
+button,
+input,
+select,
+textarea {
+  font: inherit;
+  letter-spacing: inherit;
+}
+
+/* A page opened on a chapter's address stays covered until it has landed there (landOnHash in smooth.ts). */
+html.is-landing main {
+  visibility: hidden;
+}
+
 /* Chapters receive focus from in-page navigation (see scrollToId); they are not controls. */
 section[tabindex="-1"]:focus {
   outline: none;
@@ -74,7 +89,6 @@ button:focus-visible {
 /* Typography */
 
 .display {
-  font-family: var(--font-display);
   font-weight: 300;
   line-height: 0.95;
   letter-spacing: -0.015em;
@@ -99,7 +113,6 @@ button:focus-visible {
 }
 
 .lede {
-  font-family: var(--font-display);
   font-weight: 400;
   font-size: var(--text-lede);
   line-height: 1.35;
